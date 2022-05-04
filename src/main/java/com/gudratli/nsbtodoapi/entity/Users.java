@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -39,12 +40,14 @@ public class Users
     @Column(name = "password")
     @NonNull
     private String password;
-//    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
-//    @ManyToOne(cascade = CascadeType.MERGE)
-//    @NonNull
-//    private Country country;
+    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @NonNull
+    private Countries country;
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     private Roles role;
+    @OneToMany(mappedBy = "user")
+    private List<UserLanguages> userLanguages;
 }
