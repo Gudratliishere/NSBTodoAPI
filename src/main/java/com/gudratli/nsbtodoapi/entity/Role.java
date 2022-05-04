@@ -1,17 +1,15 @@
 package com.gudratli.nsbtodoapi.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "languages")
+@Table(name = "roles")
 @Data
 @NoArgsConstructor
-public class Languages
+public class Role
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +17,9 @@ public class Languages
     @Column(name = "name")
     @NonNull
     private String name;
-    @OneToMany(mappedBy = "language")
-    private List<UserLanguages> userLanguages;
+    @NonNull
+    @Column(name = "role_description")
+    private String roleDescription;
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
 }

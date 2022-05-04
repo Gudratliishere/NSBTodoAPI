@@ -8,10 +8,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "regions")
+@Table(name = "countries")
 @Data
 @NoArgsConstructor
-public class Regions
+public class Country
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,10 @@ public class Regions
     @Column(name = "name")
     @NonNull
     private String name;
-    @OneToMany(mappedBy = "region")
-    private List<Regions> regions;
+    @JoinColumn(name = "region_id", referencedColumnName = "region_id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @NonNull
+    private Region region;
+    @OneToMany(mappedBy = "country")
+    private List<User> users;
 }

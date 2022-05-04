@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-public class Users
+public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +43,18 @@ public class Users
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
-    private Countries country;
+    private Country country;
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
-    private Roles role;
+    private Role role;
     @OneToMany(mappedBy = "user")
-    private List<UserLanguages> userLanguages;
+    private List<UserLanguage> userLanguages;
+    @OneToMany(mappedBy = "user")
+    private List<UserTechnology> userTechnologies;
+    @OneToMany(mappedBy = "user")
+    private List<Process> processes;
+    @OneToMany(mappedBy = "user")
+    private List<Conversation> conversations;
 }
+

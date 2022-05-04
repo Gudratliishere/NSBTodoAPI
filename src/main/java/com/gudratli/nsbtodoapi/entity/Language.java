@@ -8,10 +8,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "countries")
+@Table(name = "languages")
 @Data
 @NoArgsConstructor
-public class Countries
+public class Language
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +19,6 @@ public class Countries
     @Column(name = "name")
     @NonNull
     private String name;
-    @JoinColumn(name = "region_id", referencedColumnName = "region_id")
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @NonNull
-    private Regions region;
-    @OneToMany(mappedBy = "country")
-    private List<Users> users;
+    @OneToMany(mappedBy = "language")
+    private List<UserLanguage> userLanguages;
 }
