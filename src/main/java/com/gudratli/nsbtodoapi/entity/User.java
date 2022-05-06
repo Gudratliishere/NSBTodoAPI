@@ -40,6 +40,10 @@ public class User
     @Column(name = "password")
     @NonNull
     private String password;
+    @Column(name = "status")
+    private Boolean status;
+    @Column(name = "banned")
+    private Boolean banned;
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
