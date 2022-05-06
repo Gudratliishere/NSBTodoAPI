@@ -3,6 +3,7 @@ package com.gudratli.nsbtodoapi.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.List;
 @Table(name = "countries")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Country
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "country_id")
     private Integer id;
     @Column(name = "name")
     @NonNull
@@ -23,6 +26,4 @@ public class Country
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     private Region region;
-    @OneToMany(mappedBy = "country")
-    private List<User> users;
 }

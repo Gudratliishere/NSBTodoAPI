@@ -7,7 +7,6 @@ import lombok.NonNull;
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "email_tokens")
@@ -17,6 +16,7 @@ public class EmailToken
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "email_token_id")
     private Integer id;
     @NonNull
     @Column(name = "email")
@@ -32,8 +32,7 @@ public class EmailToken
 
     public static EmailToken builder ()
     {
-        EmailToken emailToken = new EmailToken();
-        return emailToken;
+        return new EmailToken();
     }
 
     public EmailToken addEmail (String email)
@@ -48,7 +47,7 @@ public class EmailToken
         return this;
     }
 
-    public EmailToken expireMinutes(Integer minutes)
+    public EmailToken expireMinutes (Integer minutes)
     {
         this.setExpire_time(new Date(Calendar.getInstance().getTimeInMillis() + (1000 * 60 * minutes)));
         return this;

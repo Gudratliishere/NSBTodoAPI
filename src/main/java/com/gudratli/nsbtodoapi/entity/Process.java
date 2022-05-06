@@ -16,6 +16,7 @@ public class Process
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "process_id")
     private Integer id;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -38,6 +39,4 @@ public class Process
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     private Status status;
-    @OneToMany(mappedBy = "process")
-    private List<Conversation> conversations;
 }

@@ -13,6 +13,7 @@ public class UserLanguage
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_language_id")
     private Integer id;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(cascade = CascadeType.MERGE)

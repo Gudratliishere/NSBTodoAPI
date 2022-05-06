@@ -15,10 +15,9 @@ public class Status
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "status_id")
     private Integer id;
     @Column(name = "name")
     @NonNull
     private String name;
-    @OneToMany(mappedBy = "status")
-    private List<Process> processes;
 }

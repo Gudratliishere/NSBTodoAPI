@@ -16,6 +16,7 @@ public class Conversation
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "conversation_id")
     private Integer id;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(cascade = CascadeType.MERGE)

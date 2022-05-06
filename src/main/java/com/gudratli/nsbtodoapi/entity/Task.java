@@ -15,6 +15,7 @@ public class Task
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
     private Integer id;
     @Column(name = "name")
     @NonNull
@@ -28,6 +29,4 @@ public class Task
     @Column(name = "result")
     @NonNull
     private String result;
-    @OneToMany(mappedBy = "task")
-    private List<Process> processes;
 }

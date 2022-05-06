@@ -15,6 +15,7 @@ public class UserTechnology
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_technology_id")
     private Integer id;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(cascade = CascadeType.MERGE)

@@ -15,6 +15,7 @@ public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Integer id;
     @Column(name = "name")
     @NonNull
@@ -52,13 +53,5 @@ public class User
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     private Role role;
-    @OneToMany(mappedBy = "user")
-    private List<UserLanguage> userLanguages;
-    @OneToMany(mappedBy = "user")
-    private List<UserTechnology> userTechnologies;
-    @OneToMany(mappedBy = "user")
-    private List<Process> processes;
-    @OneToMany(mappedBy = "user")
-    private List<Conversation> conversations;
 }
 

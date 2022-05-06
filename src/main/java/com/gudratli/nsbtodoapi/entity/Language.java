@@ -15,10 +15,9 @@ public class Language
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "language_id")
     private Integer id;
     @Column(name = "name")
     @NonNull
     private String name;
-    @OneToMany(mappedBy = "language")
-    private List<UserLanguage> userLanguages;
 }

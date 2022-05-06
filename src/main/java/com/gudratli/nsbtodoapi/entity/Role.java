@@ -13,6 +13,7 @@ public class Role
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Integer id;
     @Column(name = "name")
     @NonNull
@@ -20,6 +21,4 @@ public class Role
     @NonNull
     @Column(name = "role_description")
     private String roleDescription;
-    @OneToMany(mappedBy = "role")
-    private List<User> users;
 }
