@@ -3,6 +3,7 @@ package com.gudratli.nsbtodoapi.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class User
 {
     @Id
@@ -36,6 +38,9 @@ public class User
     @NonNull
     private String address;
     @Column(name = "cv")
+    @NonNull
+    private String cv;
+    @Column(name = "username")
     @NonNull
     private String username;
     @Column(name = "password")
