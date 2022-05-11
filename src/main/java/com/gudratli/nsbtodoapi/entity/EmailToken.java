@@ -3,6 +3,7 @@ package com.gudratli.nsbtodoapi.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Table(name = "email_tokens")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class EmailToken
 {
     @Id
