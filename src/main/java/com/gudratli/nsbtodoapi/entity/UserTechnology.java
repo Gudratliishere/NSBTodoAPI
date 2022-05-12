@@ -3,6 +3,7 @@ package com.gudratli.nsbtodoapi.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Table(name = "user_technologies")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class UserTechnology
 {
     @Id
