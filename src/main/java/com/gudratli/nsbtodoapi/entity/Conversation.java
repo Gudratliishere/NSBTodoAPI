@@ -3,6 +3,7 @@ package com.gudratli.nsbtodoapi.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "conversations")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Conversation
 {
     @Id
