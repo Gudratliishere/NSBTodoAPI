@@ -1,11 +1,13 @@
 package com.gudratli.nsbtodoapi.service.inter;
 
 import com.gudratli.nsbtodoapi.entity.User;
+import com.gudratli.nsbtodoapi.exception.DuplicateEmailException;
+import com.gudratli.nsbtodoapi.exception.DuplicatePhoneException;
+import com.gudratli.nsbtodoapi.exception.DuplicateUsernameException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface UserService
 {
     List<User> getAll ();
@@ -26,7 +28,7 @@ public interface UserService
 
     User getByUsername (String username);
 
-    User add (User user);
+    User add (User user) throws DuplicatePhoneException, DuplicateEmailException, DuplicateUsernameException;
 
     User update (User user);
 
