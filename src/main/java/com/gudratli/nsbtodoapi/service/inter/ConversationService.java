@@ -1,7 +1,6 @@
 package com.gudratli.nsbtodoapi.service.inter;
 
 import com.gudratli.nsbtodoapi.entity.Conversation;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,6 +11,8 @@ public interface ConversationService
     List<Conversation> getByUserId (Integer id);
 
     List<Conversation> getByProcessId (Integer id);
+
+    List<Conversation> getByUserIdAndProcessId (Integer userId, Integer processId);
 
     Conversation getById (Integer id);
 

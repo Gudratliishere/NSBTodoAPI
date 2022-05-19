@@ -12,4 +12,6 @@ public interface ProcessRepository extends JpaRepository<Process, Integer>
     List<Process> findByUser (User user);
 
     List<Process> findByTask (Task task);
+
+    Process findByUserAndTask (User user, Task task);
 }
