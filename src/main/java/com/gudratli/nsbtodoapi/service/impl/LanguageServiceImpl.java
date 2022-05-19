@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.impl;
 
 import com.gudratli.nsbtodoapi.entity.Language;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateLanguageException;
 import com.gudratli.nsbtodoapi.repository.LanguageRepository;
 import com.gudratli.nsbtodoapi.service.inter.LanguageService;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,18 @@ public class LanguageServiceImpl implements LanguageService
     }
 
     @Override
-    public Language add (Language language)
+    public Language add (Language language) throws DuplicateLanguageException
     {
+        checkForDuplicate(language);
+
         return languageRepository.save(language);
     }
 
     @Override
-    public Language update (Language language)
+    public Language update (Language language) throws DuplicateLanguageException
     {
+        checkForDuplicate(language);
+
         return languageRepository.save(language);
     }
 
@@ -54,5 +59,13 @@ public class LanguageServiceImpl implements LanguageService
     public void remove (Integer id)
     {
         languageRepository.findById(id).ifPresent(languageRepository::delete);
+    }
+
+    private void checkForDuplicate (Language language) throws DuplicateLanguageException
+    {
+        Language test = getByName(language.getName());
+
+        if (test != null && !test.getId().equals(language.getId()))
+            throw new DuplicateLanguageException();
     }
 }

@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.impl;
 
 import com.gudratli.nsbtodoapi.entity.Technology;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateTechnologyException;
 import com.gudratli.nsbtodoapi.repository.TechnologyRepository;
 import com.gudratli.nsbtodoapi.service.inter.TechnologyService;
 import org.springframework.stereotype.Service;
@@ -41,14 +42,18 @@ public class TechnologyServiceImpl implements TechnologyService
     }
 
     @Override
-    public Technology add (Technology technology)
+    public Technology add (Technology technology) throws DuplicateTechnologyException
     {
+        checkForDuplicate(technology);
+
         return technologyRepository.save(technology);
     }
 
     @Override
-    public Technology update (Technology technology)
+    public Technology update (Technology technology) throws DuplicateTechnologyException
     {
+        checkForDuplicate(technology);
+
         return technologyRepository.save(technology);
     }
 
@@ -56,5 +61,13 @@ public class TechnologyServiceImpl implements TechnologyService
     public void remove (Integer id)
     {
         technologyRepository.findById(id).ifPresent(technologyRepository::delete);
+    }
+
+    private void checkForDuplicate (Technology technology) throws DuplicateTechnologyException
+    {
+        Technology test = getByName(technology.getName());
+
+        if (test != null && !test.getId().equals(technology.getId()))
+            throw new DuplicateTechnologyException();
     }
 }

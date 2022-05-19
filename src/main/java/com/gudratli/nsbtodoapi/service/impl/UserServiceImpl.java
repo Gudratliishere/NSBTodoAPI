@@ -1,9 +1,9 @@
 package com.gudratli.nsbtodoapi.service.impl;
 
 import com.gudratli.nsbtodoapi.entity.User;
-import com.gudratli.nsbtodoapi.exception.DuplicateEmailException;
-import com.gudratli.nsbtodoapi.exception.DuplicatePhoneException;
-import com.gudratli.nsbtodoapi.exception.DuplicateUsernameException;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateEmailException;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicatePhoneException;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateUsernameException;
 import com.gudratli.nsbtodoapi.repository.CountryRepository;
 import com.gudratli.nsbtodoapi.repository.RoleRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
@@ -84,25 +84,37 @@ public class UserServiceImpl implements UserService
     @Override
     public User add (User user) throws DuplicatePhoneException, DuplicateEmailException, DuplicateUsernameException
     {
-        if (getByPhone(user.getPhone()) != null)
-            throw new DuplicatePhoneException();
-        if (getByEmail(user.getEmail()) != null)
-            throw new DuplicateEmailException();
-        if (getByUsername(user.getUsername()) != null)
-            throw new DuplicateUsernameException();
+        checkForDuplicates(user);
 
         return userRepository.save(user);
     }
 
     @Override
-    public User update (User user)
+    public User update (User user) throws DuplicatePhoneException, DuplicateEmailException, DuplicateUsernameException
     {
-        return null;
+        checkForDuplicates(user);
+
+        return userRepository.save(user);
     }
 
     @Override
     public void remove (Integer id)
     {
+        userRepository.findById(id).ifPresent(userRepository::delete);
+    }
 
+    private void checkForDuplicates (User user)
+            throws DuplicatePhoneException, DuplicateEmailException, DuplicateUsernameException
+    {
+        User byPhone = getByPhone(user.getPhone());
+        User byEmail = getByEmail(user.getEmail());
+        User byUsername = getByUsername(user.getUsername());
+
+        if (byPhone != null && !byPhone.getId().equals(user.getId()))
+            throw new DuplicatePhoneException();
+        if (byEmail != null && !byEmail.getId().equals(user.getId()))
+            throw new DuplicateEmailException();
+        if (byUsername != null && !byUsername.getId().equals(user.getId()))
+            throw new DuplicateUsernameException();
     }
 }

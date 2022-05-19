@@ -12,4 +12,6 @@ public interface UserTechnologyRepository extends JpaRepository<UserTechnology, 
     List<UserTechnology> findByUser (User user);
 
     List<UserTechnology> findByTechnology (Technology technology);
+
+    UserTechnology findByUserAndTechnology (User user, Technology technology);
 }

@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.inter;
 
 import com.gudratli.nsbtodoapi.entity.Region;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRegionException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface RegionService
 
     Region getByName (String name);
 
-    Region add (Region region);
+    Region add (Region region) throws DuplicateRegionException;
 
-    Region update (Region region);
+    Region update (Region region) throws DuplicateRegionException;
 
     void remove (Integer id);
 }

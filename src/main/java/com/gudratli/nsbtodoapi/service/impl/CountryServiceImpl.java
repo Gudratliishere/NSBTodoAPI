@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.impl;
 
 import com.gudratli.nsbtodoapi.entity.Country;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateCountryException;
 import com.gudratli.nsbtodoapi.repository.CountryRepository;
 import com.gudratli.nsbtodoapi.repository.RegionRepository;
 import com.gudratli.nsbtodoapi.service.inter.CountryService;
@@ -52,14 +53,18 @@ public class CountryServiceImpl implements CountryService
     }
 
     @Override
-    public Country add (Country country)
+    public Country add (Country country) throws DuplicateCountryException
     {
+        checkForDuplicate(country);
+
         return countryRepository.save(country);
     }
 
     @Override
-    public Country update (Country country)
+    public Country update (Country country) throws DuplicateCountryException
     {
+        checkForDuplicate(country);
+
         return countryRepository.save(country);
     }
 
@@ -67,5 +72,13 @@ public class CountryServiceImpl implements CountryService
     public void remove (Integer id)
     {
         countryRepository.findById(id).ifPresent(countryRepository::delete);
+    }
+
+    private void checkForDuplicate (Country country) throws DuplicateCountryException
+    {
+        Country test = countryRepository.findByNameAndRegion(country.getName(), country.getRegion());
+
+        if (test != null && !test.getId().equals(country.getId()))
+            throw new DuplicateCountryException();
     }
 }

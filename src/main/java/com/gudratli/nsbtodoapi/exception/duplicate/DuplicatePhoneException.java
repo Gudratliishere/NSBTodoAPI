@@ -1,6 +1,6 @@
-package com.gudratli.nsbtodoapi.exception;
+package com.gudratli.nsbtodoapi.exception.duplicate;
 
-public class DuplicatePhoneException extends Exception
+public class DuplicatePhoneException extends DuplicateException
 {
     private final static String defaultErrorMessage = "User already exists with this phone number.";
 

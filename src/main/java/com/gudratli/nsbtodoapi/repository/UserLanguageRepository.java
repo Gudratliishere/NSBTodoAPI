@@ -11,4 +11,5 @@ public interface UserLanguageRepository extends JpaRepository<UserLanguage, Inte
 {
     List<UserLanguage> findByUser (User user);
     List<UserLanguage> findByLanguage (Language language);
+    UserLanguage findByUserAndLanguage (User user, Language language);
 }

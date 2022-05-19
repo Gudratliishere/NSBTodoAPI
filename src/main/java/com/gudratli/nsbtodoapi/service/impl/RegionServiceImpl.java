@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.impl;
 
 import com.gudratli.nsbtodoapi.entity.Region;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRegionException;
 import com.gudratli.nsbtodoapi.repository.RegionRepository;
 import com.gudratli.nsbtodoapi.service.inter.RegionService;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,18 @@ public class RegionServiceImpl implements RegionService
     }
 
     @Override
-    public Region add (Region region)
+    public Region add (Region region) throws DuplicateRegionException
     {
+        checkForDuplicate(region);
+
         return regionRepository.save(region);
     }
 
     @Override
-    public Region update (Region region)
+    public Region update (Region region) throws DuplicateRegionException
     {
+        checkForDuplicate(region);
+
         return regionRepository.save(region);
     }
 
@@ -54,5 +59,13 @@ public class RegionServiceImpl implements RegionService
     public void remove (Integer id)
     {
         regionRepository.findById(id).ifPresent(regionRepository::delete);
+    }
+
+    private void checkForDuplicate (Region region) throws DuplicateRegionException
+    {
+        Region test = getByName(region.getName());
+
+        if (test != null && !test.getId().equals(region.getId()))
+            throw new DuplicateRegionException();
     }
 }

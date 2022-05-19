@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.inter;
 
 import com.gudratli.nsbtodoapi.entity.Technology;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateTechnologyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface TechnologyService
 
     Technology getByName (String name);
 
-    Technology add (Technology technology);
+    Technology add (Technology technology) throws DuplicateTechnologyException;
 
-    Technology update (Technology technology);
+    Technology update (Technology technology) throws DuplicateTechnologyException;
 
     void remove (Integer id);
 }

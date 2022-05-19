@@ -1,6 +1,7 @@
 package com.gudratli.nsbtodoapi.service.inter;
 
 import com.gudratli.nsbtodoapi.entity.Country;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateCountryException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public interface CountryService
 
     Country getByName (String name);
 
-    Country add (Country country);
+    Country add (Country country) throws DuplicateCountryException;
 
-    Country update (Country country);
+    Country update (Country country) throws DuplicateCountryException;
 
     void remove (Integer id);
 }

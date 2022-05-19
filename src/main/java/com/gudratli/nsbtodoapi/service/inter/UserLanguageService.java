@@ -1,7 +1,7 @@
 package com.gudratli.nsbtodoapi.service.inter;
 
 import com.gudratli.nsbtodoapi.entity.UserLanguage;
-import org.springframework.stereotype.Service;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateUserLanguageException;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public interface UserLanguageService
 
     UserLanguage getById (Integer id);
 
-    UserLanguage add (UserLanguage userLanguage);
+    UserLanguage add (UserLanguage userLanguage) throws DuplicateUserLanguageException;
 
-    UserLanguage update (UserLanguage userLanguage);
+    UserLanguage update (UserLanguage userLanguage) throws DuplicateUserLanguageException;
 
     void remove (Integer id);
 }
