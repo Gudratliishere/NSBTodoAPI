@@ -1,7 +1,7 @@
 package com.gudratli.nsbtodoapi.repository;
 
 import com.gudratli.nsbtodoapi.NsbTodoApiApplication;
-import com.gudratli.nsbtodoapi.entity.*;
+import com.gudratli.nsbtodoapi.entity.UserLanguage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -36,7 +36,7 @@ class UserLanguageRepositoryTest
     @Test
     public void testFindByUser ()
     {
-        List<UserLanguage> expected = getUserLanguages();
+        List<UserLanguage> expected = getUserLanguageList();
         List<UserLanguage> actual = userLanguageRepository.findByUser(getUser());
 
         assertEquals(expected, actual);
@@ -45,7 +45,7 @@ class UserLanguageRepositoryTest
     @Test
     public void testFindByLanguage ()
     {
-        List<UserLanguage> expected = getUserLanguages();
+        List<UserLanguage> expected = getUserLanguageList();
         List<UserLanguage> actual = userLanguageRepository.findByLanguage(getLanguage());
 
         assertEquals(expected, actual);
@@ -54,7 +54,7 @@ class UserLanguageRepositoryTest
     @Test
     public void testFindAll ()
     {
-        List<UserLanguage> expected = getUserLanguages();
+        List<UserLanguage> expected = getUserLanguageList();
         List<UserLanguage> actual = userLanguageRepository.findAll();
 
         assertEquals(expected, actual);
@@ -96,62 +96,5 @@ class UserLanguageRepositoryTest
         UserLanguage actual = userLanguageRepository.findById(2).orElse(null);
 
         assertNull(actual);
-    }
-
-    private UserLanguage getUserLanguage ()
-    {
-        UserLanguage userLanguage = new UserLanguage(getUser(), getLanguage(), 8);
-        userLanguage.setId(1);
-        return userLanguage;
-    }
-
-    private UserLanguage getUserLanguage (Integer level, int id)
-    {
-        UserLanguage userLanguage = new UserLanguage(getUser(), getLanguage(), level);
-        userLanguage.setId(id);
-        return userLanguage;
-    }
-
-    private User getUser ()
-    {
-        User user = new User("Dunay", "Gudratli", "0556105884", "dunay@gmail", "git",
-                "masazir", "cv", "dunay", "123", getCountry(), getRole());
-        user.setId(6);
-        user.setStatus(true);
-        user.setBanned(false);
-        return user;
-    }
-
-    private Role getRole ()
-    {
-        Role role = new Role("USER", "User");
-        role.setId(1);
-        return role;
-    }
-
-    private Country getCountry ()
-    {
-        Country country = new Country("UK", getRegion());
-        country.setId(1);
-        return country;
-    }
-
-    private Region getRegion ()
-    {
-        Region region = new Region("Asia");
-        region.setId(1);
-        return region;
-    }
-
-    private Language getLanguage ()
-    {
-        Language language = new Language("Turkish");
-        language.setId(1);
-        return language;
-    }
-
-    private List<UserLanguage> getUserLanguages ()
-    {
-        return Arrays.asList(getUserLanguage(), getUserLanguage(10, 2));
     }
 }

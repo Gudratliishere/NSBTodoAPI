@@ -9,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.getRole;
+import static com.gudratli.nsbtodoapi.util.Entities.getRoleList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -44,7 +45,7 @@ class RoleRepositoryTest
     @Test
     public void testFindAll ()
     {
-        List<Role> expected = getRoles();
+        List<Role> expected = getRoleList();
         List<Role> actual = roleRepository.findAll();
 
         assertEquals(expected, actual);
@@ -86,24 +87,5 @@ class RoleRepositoryTest
         Role actual = roleRepository.findById(2).orElse(null);
 
         assertNull(actual);
-    }
-
-    private Role getRole ()
-    {
-        Role role = new Role("USER", "User");
-        role.setId(1);
-        return role;
-    }
-
-    private Role getRole (String name, String description, int id)
-    {
-        Role role = new Role(name, description);
-        role.setId(id);
-        return role;
-    }
-
-    private List<Role> getRoles ()
-    {
-        return Arrays.asList(getRole(), getRole("ADMIN", "Admin", 2));
     }
 }

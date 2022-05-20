@@ -2,7 +2,6 @@ package com.gudratli.nsbtodoapi.repository;
 
 import com.gudratli.nsbtodoapi.NsbTodoApiApplication;
 import com.gudratli.nsbtodoapi.entity.Country;
-import com.gudratli.nsbtodoapi.entity.Region;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.getCountry;
+import static com.gudratli.nsbtodoapi.util.Entities.getCountryList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -36,7 +36,7 @@ class CountryRepositoryTest
     @Test
     public void testFindAll ()
     {
-        List<Country> expected = getList();
+        List<Country> expected = getCountryList();
         List<Country> actual = countryRepository.findAll();
 
         assertEquals(expected, actual);
@@ -82,31 +82,5 @@ class CountryRepositoryTest
         Country country = countryRepository.findById(2).orElse(null);
 
         assertNull(country);
-    }
-
-    private Country getCountry (String name)
-    {
-        Country country = new Country(name, getRegion());
-        country.setId(1);
-        return country;
-    }
-
-    private Country getCountry (String name, int id)
-    {
-        Country country = new Country(name, getRegion());
-        country.setId(id);
-        return country;
-    }
-
-    private Region getRegion ()
-    {
-        Region region = new Region("Asia");
-        region.setId(1);
-        return region;
-    }
-
-    private List<Country> getList ()
-    {
-        return Arrays.asList(getCountry("UK", 1), getCountry("Russia", 2));
     }
 }

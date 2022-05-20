@@ -1,9 +1,6 @@
 package com.gudratli.nsbtodoapi.repository;
 
 import com.gudratli.nsbtodoapi.NsbTodoApiApplication;
-import com.gudratli.nsbtodoapi.entity.Country;
-import com.gudratli.nsbtodoapi.entity.Region;
-import com.gudratli.nsbtodoapi.entity.Role;
 import com.gudratli.nsbtodoapi.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,11 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -31,7 +26,7 @@ class UserRepositoryTest
     @Test
     public void testFindByNameContaining ()
     {
-        List<User> expected = getUsers();
+        List<User> expected = getUserList();
         List<User> actual = userRepository.findByNameContaining("una");
 
         assertEquals(expected, actual);
@@ -40,7 +35,7 @@ class UserRepositoryTest
     @Test
     public void testFindBySurnameContaining ()
     {
-        List<User> expected = getUsers();
+        List<User> expected = getUserList();
         List<User> actual = userRepository.findBySurnameContaining("udr");
 
         assertEquals(expected, actual);
@@ -49,7 +44,7 @@ class UserRepositoryTest
     @Test
     public void testFindByStatus ()
     {
-        List<User> expected = getActiveUsers();
+        List<User> expected = getActiveUserList();
         List<User> actual = userRepository.findByStatus(true);
 
         assertEquals(expected, actual);
@@ -58,7 +53,7 @@ class UserRepositoryTest
     @Test
     public void testFindByBanned ()
     {
-        List<User> expected = getBannedUsers();
+        List<User> expected = getBannedUserList();
         List<User> actual = userRepository.findByBanned(true);
 
         assertEquals(expected, actual);
@@ -67,7 +62,7 @@ class UserRepositoryTest
     @Test
     public void testFindByCountry ()
     {
-        List<User> expected = getUsers();
+        List<User> expected = getUserList();
         List<User> actual = userRepository.findByCountry(getCountry());
 
         assertEquals(expected, actual);
@@ -76,7 +71,7 @@ class UserRepositoryTest
     @Test
     public void testFindByRole ()
     {
-        List<User> expected = getUsers();
+        List<User> expected = getUserList();
         List<User> actual = userRepository.findByRole(getRole());
 
         assertEquals(expected, actual);
@@ -145,70 +140,5 @@ class UserRepositoryTest
         User user = userRepository.findById(8).orElse(null);
 
         assertNull(user);
-    }
-
-    private User getActiveUser (int id)
-    {
-        return getUser("Dunay", true, false, id);
-    }
-
-    private User getBannedUser ()
-    {
-        return getUser("Dunay2", false, true, 7);
-    }
-
-    private User getUser (String name, Boolean status, Boolean banned, int id)
-    {
-        User user = new User(name, "Gudratli", "0556105884", "dunay@gmail", "git",
-                "masazir", "cv", "dunay", "123", getCountry(), getRole());
-        user.setId(id);
-        user.setStatus(status);
-        user.setBanned(banned);
-        return user;
-    }
-
-    private User getUser ()
-    {
-        User user = new User("Turqay", "Gudratli", "0556105884", "dunay@gmail", "git",
-                "masazir", "cv", "dunay", "123", getCountry(), getRole());
-        user.setStatus(true);
-        user.setBanned(true);
-        return user;
-    }
-
-    private Role getRole ()
-    {
-        Role role = new Role("USER", "User");
-        role.setId(1);
-        return role;
-    }
-
-    private Country getCountry ()
-    {
-        Country country = new Country("UK", getRegion());
-        country.setId(1);
-        return country;
-    }
-
-    private Region getRegion ()
-    {
-        Region region = new Region("Asia");
-        region.setId(1);
-        return region;
-    }
-
-    private List<User> getUsers ()
-    {
-        return Arrays.asList(getActiveUser(6), getBannedUser(), getActiveUser(8));
-    }
-
-    private List<User> getActiveUsers ()
-    {
-        return Arrays.asList(getActiveUser(6), getActiveUser(8));
-    }
-
-    private List<User> getBannedUsers ()
-    {
-        return Collections.singletonList(getBannedUser());
     }
 }

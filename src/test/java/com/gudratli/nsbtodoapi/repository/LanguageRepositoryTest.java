@@ -9,11 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.gudratli.nsbtodoapi.util.Entities.getLanguage;
+import static com.gudratli.nsbtodoapi.util.Entities.getLanguageList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @Transactional
@@ -44,7 +45,7 @@ class LanguageRepositoryTest
     @Test
     public void testFindAll ()
     {
-        List<Language> expected = getLanguages();
+        List<Language> expected = getLanguageList();
         List<Language> actual = languageRepository.findAll();
 
         assertEquals(expected, actual);
@@ -87,24 +88,5 @@ class LanguageRepositoryTest
         Language actual = languageRepository.findById(2).orElse(null);
 
         assertNull(actual);
-    }
-
-    private Language getLanguage ()
-    {
-        Language language = new Language("Turkish");
-        language.setId(1);
-        return language;
-    }
-
-    private Language getLanguage (String name, int id)
-    {
-        Language language = new Language(name);
-        language.setId(id);
-        return language;
-    }
-
-    private List<Language> getLanguages ()
-    {
-        return Arrays.asList(getLanguage("Turkish", 1), getLanguage("English", 2));
     }
 }

@@ -9,10 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.getRegion;
+import static com.gudratli.nsbtodoapi.util.Entities.getRegionList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -124,24 +125,5 @@ class RegionRepositoryTest
         Region actual = regionRepository.findById(3).orElse(null);
 
         assertNull(actual);
-    }
-
-    private Region getRegion ()
-    {
-        Region region = new Region("Asia");
-        region.setId(1);
-        return region;
-    }
-
-    private Region getRegion (String name, int id)
-    {
-        Region region = new Region(name);
-        region.setId(id);
-        return region;
-    }
-
-    private List<Region> getRegionList ()
-    {
-        return Arrays.asList(getRegion("Asia", 1), getRegion("Europa", 2));
     }
 }

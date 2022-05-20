@@ -12,4 +12,6 @@ public interface ConversationRepository extends JpaRepository<Conversation, Inte
     List<Conversation> findByProcess (Process process);
 
     List<Conversation> findByUser (User user);
+
+    List<Conversation> findByUserAndProcess (User user, Process process);
 }
