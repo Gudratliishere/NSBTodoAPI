@@ -9,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.getStatus;
+import static com.gudratli.nsbtodoapi.util.Entities.getStatusList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -35,7 +36,7 @@ class StatusRepositoryTest
     @Test
     public void testFindAll ()
     {
-        List<Status> expected = getStatuses();
+        List<Status> expected = getStatusList();
         List<Status> actual = statusRepository.findAll();
 
         assertEquals(expected, actual);
@@ -77,24 +78,5 @@ class StatusRepositoryTest
         Status actual = statusRepository.findById(2).orElse(null);
 
         assertNull(actual);
-    }
-
-    private Status getStatus ()
-    {
-        Status status = new Status("Finished");
-        status.setId(1);
-        return status;
-    }
-
-    private Status getStatus (String name, int id)
-    {
-        Status status = new Status(name);
-        status.setId(id);
-        return status;
-    }
-
-    private List<Status> getStatuses ()
-    {
-        return Arrays.asList(getStatus(), getStatus("Incomplete", 2));
     }
 }

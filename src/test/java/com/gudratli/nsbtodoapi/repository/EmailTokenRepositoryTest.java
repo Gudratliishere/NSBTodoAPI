@@ -2,7 +2,6 @@ package com.gudratli.nsbtodoapi.repository;
 
 import com.gudratli.nsbtodoapi.NsbTodoApiApplication;
 import com.gudratli.nsbtodoapi.entity.EmailToken;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.gudratli.nsbtodoapi.util.Entities.getEmailToken;
+import static org.assertj.core.util.DateUtil.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -98,31 +98,5 @@ class EmailTokenRepositoryTest
         EmailToken actual = emailTokenRepository.findById(3).orElse(null);
 
         assertNull(actual);
-    }
-
-    @SneakyThrows
-    private EmailToken getEmailToken ()
-    {
-        String date = "2022-05-11 12:08:26";
-        EmailToken emailToken = new EmailToken("dunay@gmail", "123", parse(date));
-        emailToken.setId(2);
-        emailToken.setStatus(true);
-        return emailToken;
-    }
-
-    @SneakyThrows
-    private EmailToken getEmailToken (String email, String token, Date expireTime, int id)
-    {
-        EmailToken emailToken = new EmailToken(email, token, expireTime);
-        emailToken.setId(id);
-        emailToken.setStatus(true);
-        return emailToken;
-    }
-
-    @SneakyThrows
-    private Date parse (String date)
-    {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return formatter.parse(date);
     }
 }

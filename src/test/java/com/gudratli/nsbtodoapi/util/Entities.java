@@ -1,13 +1,18 @@
 package com.gudratli.nsbtodoapi.util;
 
+import com.gudratli.nsbtodoapi.entity.Process;
 import com.gudratli.nsbtodoapi.entity.*;
+import lombok.SneakyThrows;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class Entities
 {
+    //Region
     public static Region getRegion ()
     {
         Region region = new Region("Asia");
@@ -22,6 +27,13 @@ public class Entities
         return region;
     }
 
+    public static List<Region> getRegionList ()
+    {
+        return Arrays.asList(getRegion("Asia", 1), getRegion("Europa", 2));
+    }
+    //Region end
+
+    //Country
     public static Country getCountry (String name)
     {
         Country country = new Country(name, getRegion());
@@ -43,6 +55,13 @@ public class Entities
         return country;
     }
 
+    public static List<Country> getCountryList ()
+    {
+        return Arrays.asList(getCountry("UK", 1), getCountry("Russia", 2));
+    }
+    //Country end
+
+    //Language
     public static Language getLanguage ()
     {
         Language language = new Language("Turkish");
@@ -57,6 +76,13 @@ public class Entities
         return language;
     }
 
+    public static List<Language> getLanguageList ()
+    {
+        return Arrays.asList(getLanguage("Turkish", 1), getLanguage("English", 2));
+    }
+    //Language end
+
+    //Technology
     public static Technology getTechnology ()
     {
         Technology technology = new Technology("HTML");
@@ -71,6 +97,13 @@ public class Entities
         return technology;
     }
 
+    public static List<Technology> getTechnologyList ()
+    {
+        return Arrays.asList(getTechnology(), getTechnology("CSS", 2));
+    }
+    //Technology
+
+    //UserLanguage
     public static UserLanguage getUserLanguage ()
     {
         UserLanguage userLanguage = new UserLanguage(getUser(), getLanguage(), 8);
@@ -85,6 +118,13 @@ public class Entities
         return userLanguage;
     }
 
+    public static List<UserLanguage> getUserLanguageList ()
+    {
+        return Arrays.asList(getUserLanguage(), getUserLanguage(10, 2));
+    }
+    //UserLanguage end
+
+    //UserTechnology
     public static UserTechnology getUserTechnology ()
     {
         UserTechnology userTechnology = new UserTechnology(getUser(), getTechnology(), 5);
@@ -103,22 +143,114 @@ public class Entities
     {
         return Arrays.asList(getUserTechnology(), getUserTechnology(7, 2));
     }
+    //UserTechnology end
 
-    public static List<UserLanguage> getUserLanguageList ()
+    //Task
+    public static Task getTask ()
     {
-        return Arrays.asList(getUserLanguage(), getUserLanguage(10, 2));
+        Task task = new Task("Rename project", "You will rename project", "doc", "result");
+        task.setId(1);
+        return task;
     }
 
-    public static User getActiveUser (int id)
+    public static Task getTask (String name, int id)
     {
-        return getUser("Dunay", true, false, id);
+        Task task = new Task(name, "You will rename project", "doc", "result");
+        task.setId(id);
+        return task;
     }
 
-    public static User getBannedUser ()
+    public static List<Task> getTaskList ()
     {
-        return getUser("Dunay2", false, true, 7);
+        return Arrays.asList(getTask(), getTask("Delete equals", 2));
+    }
+    //Task end
+
+    //Status
+    public static Status getStatus ()
+    {
+        Status status = new Status("Finished");
+        status.setId(1);
+        return status;
     }
 
+    public static Status getStatus (String name, int id)
+    {
+        Status status = new Status(name);
+        status.setId(id);
+        return status;
+    }
+
+    public static List<Status> getStatusList ()
+    {
+        return Arrays.asList(getStatus(), getStatus("Incomplete", 2));
+    }
+    //Status end
+
+    //Process
+    public static Process getProcess ()
+    {
+        Process process = new Process(getUser(), getTask(), parse("2022-03-15 00:05:21"),
+                parse("2022-05-12 12:08:23"), parse("2022-08-15 00:05:21"), getStatus());
+        process.setId(1);
+        return process;
+    }
+
+    public static Process getProcess (String year, int id)
+    {
+        Process process = new Process(getUser(), getTask(), parse("202" + year + "-03-15 00:05:21"),
+                parse("2022-05-12 12:08:23"), parse("202" + year + "-08-15 00:05:21"), getStatus());
+        process.setId(id);
+        return process;
+    }
+
+    public static List<Process> getProcessList ()
+    {
+        return Arrays.asList(getProcess(), getProcess("1", 2));
+    }
+    //Process end
+
+    //Conversation
+    public static Conversation getConversation ()
+    {
+        Conversation conversation = new Conversation(getUser(), getProcess(), "Hello", parse("2022-05-13 22:37:05"));
+        conversation.setId(1);
+        return conversation;
+    }
+
+    public static Conversation getConversation (String message, int id)
+    {
+        Conversation conversation = new Conversation(getUser(), getProcess(), message, parse("2022-05-13 22:37:05"));
+        conversation.setId(id);
+        return conversation;
+    }
+
+    public static List<Conversation> getConversationList ()
+    {
+        return Arrays.asList(getConversation(), getConversation("How", 2));
+    }
+    //Conversation end
+
+    //EmailToken
+    public static EmailToken getEmailToken ()
+    {
+        String date = "2022-05-11 12:08:26";
+        EmailToken emailToken = new EmailToken("dunay@gmail", "123", parse(date));
+        emailToken.setId(2);
+        emailToken.setStatus(true);
+        return emailToken;
+    }
+
+    public static EmailToken getEmailToken (String email, String token, Date expireTime, int id)
+    {
+        EmailToken emailToken = new EmailToken(email, token, expireTime);
+        emailToken.setId(id);
+        emailToken.setStatus(true);
+        return emailToken;
+    }
+    //EmailToken end
+
+    //User
     public static User getUser (String name, Boolean status, Boolean banned, int id)
     {
         User user = new User(name, "Gudratli", "0556105884", "dunay@gmail", "git",
@@ -138,6 +270,33 @@ public class Entities
         return user;
     }
 
+    public static User getActiveUser (int id)
+    {
+        return getUser("Dunay", true, false, id);
+    }
+
+    public static User getBannedUser ()
+    {
+        return getUser("Dunay2", false, true, 7);
+    }
+
+    public static List<User> getUserList ()
+    {
+        return Arrays.asList(getActiveUser(6), getBannedUser(), getActiveUser(8));
+    }
+
+    public static List<User> getActiveUserList ()
+    {
+        return Arrays.asList(getActiveUser(6), getActiveUser(8));
+    }
+
+    public static List<User> getBannedUserList ()
+    {
+        return Collections.singletonList(getBannedUser());
+    }
+    //User end
+
+    //Role
     public static Role getRole ()
     {
         Role role = new Role("USER", "User");
@@ -156,39 +315,13 @@ public class Entities
     {
         return Arrays.asList(getRole(), getRole("ADMIN", "Admin", 2));
     }
+    //Role end
 
-    public static List<User> getUserList ()
+    //Date util methods
+    @SneakyThrows
+    public static Date parse (String date)
     {
-        return Arrays.asList(getActiveUser(6), getBannedUser(), getActiveUser(8));
-    }
-
-    public static List<User> getActiveUserList ()
-    {
-        return Arrays.asList(getActiveUser(6), getActiveUser(8));
-    }
-
-    public static List<User> getBannedUserList ()
-    {
-        return Collections.singletonList(getBannedUser());
-    }
-
-    public static List<Technology> getTechnologyList ()
-    {
-        return Arrays.asList(getTechnology(), getTechnology("CSS", 2));
-    }
-
-    public static List<Language> getLanguageList ()
-    {
-        return Arrays.asList(getLanguage("Turkish", 1), getLanguage("English", 2));
-    }
-
-    public static List<Country> getCountryList ()
-    {
-        return Arrays.asList(getCountry("UK", 1), getCountry("Russia", 2));
-    }
-
-    public static List<Region> getRegionList ()
-    {
-        return Arrays.asList(getRegion("Asia", 1), getRegion("Europa", 2));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.parse(date);
     }
 }

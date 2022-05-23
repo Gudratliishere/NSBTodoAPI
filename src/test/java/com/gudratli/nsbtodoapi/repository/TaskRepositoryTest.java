@@ -13,6 +13,8 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.gudratli.nsbtodoapi.util.Entities.getTask;
+import static com.gudratli.nsbtodoapi.util.Entities.getTaskList;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -35,7 +37,7 @@ class TaskRepositoryTest
     @Test
     public void testFindByNameContaining ()
     {
-        List<Task> expected = getTasks();
+        List<Task> expected = getTaskList();
         List<Task> actual = taskRepository.findByNameContaining("e");
 
         assertEquals(expected, actual);
@@ -44,7 +46,7 @@ class TaskRepositoryTest
     @Test
     public void testFindAll ()
     {
-        List<Task> expected = getTasks();
+        List<Task> expected = getTaskList();
         List<Task> actual = taskRepository.findAll();
 
         assertEquals(expected, actual);
@@ -86,24 +88,5 @@ class TaskRepositoryTest
         Task actual = taskRepository.findById(2).orElse(null);
 
         assertNull(actual);
-    }
-
-    private Task getTask ()
-    {
-        Task task = new Task("Rename project", "You will rename project", "doc", "result");
-        task.setId(1);
-        return task;
-    }
-
-    private Task getTask (String name, int id)
-    {
-        Task task = new Task(name, "You will rename project", "doc", "result");
-        task.setId(id);
-        return task;
-    }
-
-    private List<Task> getTasks ()
-    {
-        return Arrays.asList(getTask(), getTask("Delete equals", 2));
     }
 }
