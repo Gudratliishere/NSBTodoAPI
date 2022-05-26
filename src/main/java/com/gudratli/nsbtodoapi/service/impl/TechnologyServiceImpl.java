@@ -38,7 +38,8 @@ public class TechnologyServiceImpl implements TechnologyService
     @Override
     public Technology getByName (String name)
     {
-        return technologyRepository.findByNameContaining(name).get(0);
+        List<Technology> technologies = technologyRepository.findByNameContaining(name);
+        return (technologies.size() > 0) ? technologies.get(0) : null;
     }
 
     @Override
