@@ -125,10 +125,10 @@ class CountryServiceImplTest
             countryService.add(country);
         } catch (DuplicateCountryException e)
         {
-            assertInstanceOf(DuplicateCountryException.class, e.getCause());
+            assertInstanceOf(DuplicateCountryException.class, e);
         }
 
-        verify(countryRepository).findByNameContaining(country.getName());
+        verify(countryRepository).findByNameAndRegion(country.getName(), country.getRegion());
     }
 
     @Test
@@ -159,10 +159,10 @@ class CountryServiceImplTest
             countryService.update(expected);
         } catch (DuplicateCountryException e)
         {
-            assertInstanceOf(DuplicateCountryException.class, e.getCause());
+            assertInstanceOf(DuplicateCountryException.class, e);
         }
 
-        verify(countryRepository).findByNameContaining(country.getName());
+        verify(countryRepository).findByNameAndRegion(country.getName(), country.getRegion());
     }
 
     @Test
