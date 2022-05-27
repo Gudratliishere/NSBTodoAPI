@@ -248,6 +248,12 @@ public class Entities
         emailToken.setStatus(true);
         return emailToken;
     }
+
+    public static List<EmailToken> getEmailTokenList ()
+    {
+        return Arrays.asList(getEmailToken(), getEmailToken("turqay@gmail", "555",
+                parse("2023-06-05 16:43:22"), 3));
+    }
     //EmailToken end
 
     //User

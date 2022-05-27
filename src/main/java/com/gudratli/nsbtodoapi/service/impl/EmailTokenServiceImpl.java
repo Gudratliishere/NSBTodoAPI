@@ -38,7 +38,9 @@ public class EmailTokenServiceImpl implements EmailTokenService
     @Override
     public EmailToken getActiveByEmail (String email)
     {
-        return emailTokenRepository.findByEmailAndStatus(email, true).get(0);
+        List<EmailToken> emailTokens = emailTokenRepository.findByEmailAndStatus(email, true);
+
+        return (emailTokens.size() > 0) ? emailTokens.get(0) : null;
     }
 
     @Override
