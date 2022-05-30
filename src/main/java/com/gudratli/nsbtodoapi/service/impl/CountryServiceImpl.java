@@ -5,22 +5,17 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateCountryException;
 import com.gudratli.nsbtodoapi.repository.CountryRepository;
 import com.gudratli.nsbtodoapi.repository.RegionRepository;
 import com.gudratli.nsbtodoapi.service.inter.CountryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CountryServiceImpl implements CountryService
 {
     private final CountryRepository countryRepository;
     private final RegionRepository regionRepository;
-
-    public CountryServiceImpl (CountryRepository countryRepository,
-            RegionRepository regionRepository)
-    {
-        this.countryRepository = countryRepository;
-        this.regionRepository = regionRepository;
-    }
 
     @Override
     public List<Country> getAll ()

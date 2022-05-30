@@ -3,19 +3,17 @@ package com.gudratli.nsbtodoapi.service.impl;
 import com.gudratli.nsbtodoapi.entity.EmailToken;
 import com.gudratli.nsbtodoapi.repository.EmailTokenRepository;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class EmailTokenServiceImpl implements EmailTokenService
 {
     private final EmailTokenRepository emailTokenRepository;
-
-    public EmailTokenServiceImpl (
-            EmailTokenRepository emailTokenRepository)
-    {this.emailTokenRepository = emailTokenRepository;}
 
     @Override
     public List<EmailToken> getAll ()

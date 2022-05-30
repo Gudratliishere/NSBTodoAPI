@@ -8,24 +8,18 @@ import com.gudratli.nsbtodoapi.repository.CountryRepository;
 import com.gudratli.nsbtodoapi.repository.RoleRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.service.inter.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final RoleRepository roleRepository;
-
-    public UserServiceImpl (UserRepository userRepository,
-            CountryRepository countryRepository, RoleRepository roleRepository)
-    {
-        this.userRepository = userRepository;
-        this.countryRepository = countryRepository;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public List<User> getAll ()

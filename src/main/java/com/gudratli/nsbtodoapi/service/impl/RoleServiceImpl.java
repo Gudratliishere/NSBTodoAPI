@@ -4,16 +4,16 @@ import com.gudratli.nsbtodoapi.entity.Role;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRoleException;
 import com.gudratli.nsbtodoapi.repository.RoleRepository;
 import com.gudratli.nsbtodoapi.service.inter.RoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService
 {
     private final RoleRepository roleRepository;
-
-    public RoleServiceImpl (RoleRepository roleRepository) {this.roleRepository = roleRepository;}
 
     @Override
     public List<Role> getAll ()

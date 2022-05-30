@@ -4,18 +4,16 @@ import com.gudratli.nsbtodoapi.entity.Technology;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateTechnologyException;
 import com.gudratli.nsbtodoapi.repository.TechnologyRepository;
 import com.gudratli.nsbtodoapi.service.inter.TechnologyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class TechnologyServiceImpl implements TechnologyService
 {
     private final TechnologyRepository technologyRepository;
-
-    public TechnologyServiceImpl (
-            TechnologyRepository technologyRepository)
-    {this.technologyRepository = technologyRepository;}
 
     @Override
     public List<Technology> getAll ()

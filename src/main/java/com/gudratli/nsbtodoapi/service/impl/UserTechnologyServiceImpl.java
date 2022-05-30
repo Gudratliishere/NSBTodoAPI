@@ -6,25 +6,18 @@ import com.gudratli.nsbtodoapi.repository.TechnologyRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.repository.UserTechnologyRepository;
 import com.gudratli.nsbtodoapi.service.inter.UserTechnologyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserTechnologyServiceImpl implements UserTechnologyService
 {
     private final UserTechnologyRepository userTechnologyRepository;
     private final UserRepository userRepository;
     private final TechnologyRepository technologyRepository;
-
-    public UserTechnologyServiceImpl (
-            UserTechnologyRepository userTechnologyRepository,
-            UserRepository userRepository, TechnologyRepository technologyRepository)
-    {
-        this.userTechnologyRepository = userTechnologyRepository;
-        this.userRepository = userRepository;
-        this.technologyRepository = technologyRepository;
-    }
 
     @Override
     public List<UserTechnology> getAll ()

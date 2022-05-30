@@ -4,16 +4,16 @@ import com.gudratli.nsbtodoapi.entity.Status;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateStatusException;
 import com.gudratli.nsbtodoapi.repository.StatusRepository;
 import com.gudratli.nsbtodoapi.service.inter.StatusService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class StatusServiceImpl implements StatusService
 {
     private final StatusRepository statusRepository;
-
-    public StatusServiceImpl (StatusRepository statusRepository) {this.statusRepository = statusRepository;}
 
     @Override
     public List<Status> getAll ()

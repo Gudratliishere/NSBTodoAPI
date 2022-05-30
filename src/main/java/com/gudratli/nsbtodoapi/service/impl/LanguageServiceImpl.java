@@ -4,16 +4,16 @@ import com.gudratli.nsbtodoapi.entity.Language;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateLanguageException;
 import com.gudratli.nsbtodoapi.repository.LanguageRepository;
 import com.gudratli.nsbtodoapi.service.inter.LanguageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class LanguageServiceImpl implements LanguageService
 {
     private final LanguageRepository languageRepository;
-
-    public LanguageServiceImpl (LanguageRepository languageRepository) {this.languageRepository = languageRepository;}
 
     @Override
     public List<Language> getAll ()

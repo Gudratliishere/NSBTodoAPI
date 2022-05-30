@@ -6,24 +6,18 @@ import com.gudratli.nsbtodoapi.repository.LanguageRepository;
 import com.gudratli.nsbtodoapi.repository.UserLanguageRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.service.inter.UserLanguageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserLanguageServiceImpl implements UserLanguageService
 {
     private final UserLanguageRepository userLanguageRepository;
     private final UserRepository userRepository;
     private final LanguageRepository languageRepository;
-
-    public UserLanguageServiceImpl (UserLanguageRepository userLanguageRepository,
-            UserRepository userRepository, LanguageRepository languageRepository)
-    {
-        this.userLanguageRepository = userLanguageRepository;
-        this.userRepository = userRepository;
-        this.languageRepository = languageRepository;
-    }
 
     @Override
     public List<UserLanguage> getAll ()

@@ -3,16 +3,16 @@ package com.gudratli.nsbtodoapi.service.impl;
 import com.gudratli.nsbtodoapi.entity.Task;
 import com.gudratli.nsbtodoapi.repository.TaskRepository;
 import com.gudratli.nsbtodoapi.service.inter.TaskService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class TaskServiceImpl implements TaskService
 {
     private final TaskRepository taskRepository;
-
-    public TaskServiceImpl (TaskRepository taskRepository) {this.taskRepository = taskRepository;}
 
     @Override
     public List<Task> getAll ()

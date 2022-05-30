@@ -6,24 +6,18 @@ import com.gudratli.nsbtodoapi.repository.ProcessRepository;
 import com.gudratli.nsbtodoapi.repository.TaskRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.service.inter.ProcessService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ProcessServiceImpl implements ProcessService
 {
     private final ProcessRepository processRepository;
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
-
-    public ProcessServiceImpl (ProcessRepository processRepository,
-            UserRepository userRepository, TaskRepository taskRepository)
-    {
-        this.processRepository = processRepository;
-        this.userRepository = userRepository;
-        this.taskRepository = taskRepository;
-    }
 
     @Override
     public List<Process> getAll ()

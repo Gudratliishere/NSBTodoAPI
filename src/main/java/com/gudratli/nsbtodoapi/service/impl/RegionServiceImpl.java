@@ -4,16 +4,16 @@ import com.gudratli.nsbtodoapi.entity.Region;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRegionException;
 import com.gudratli.nsbtodoapi.repository.RegionRepository;
 import com.gudratli.nsbtodoapi.service.inter.RegionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class RegionServiceImpl implements RegionService
 {
     private final RegionRepository regionRepository;
-
-    public RegionServiceImpl (RegionRepository regionRepository) {this.regionRepository = regionRepository;}
 
     @Override
     public List<Region> getAll ()
