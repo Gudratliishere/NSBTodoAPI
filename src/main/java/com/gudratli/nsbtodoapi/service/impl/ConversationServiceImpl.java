@@ -5,25 +5,18 @@ import com.gudratli.nsbtodoapi.repository.ConversationRepository;
 import com.gudratli.nsbtodoapi.repository.ProcessRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.service.inter.ConversationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ConversationServiceImpl implements ConversationService
 {
     private final ConversationRepository conversationRepository;
     private final UserRepository userRepository;
     private final ProcessRepository processRepository;
-
-    public ConversationServiceImpl (
-            ConversationRepository conversationRepository,
-            UserRepository userRepository, ProcessRepository processRepository)
-    {
-        this.conversationRepository = conversationRepository;
-        this.userRepository = userRepository;
-        this.processRepository = processRepository;
-    }
 
     @Override
     public List<Conversation> getAll ()
