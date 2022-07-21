@@ -30,7 +30,7 @@ public class EmailToken
     private Boolean status;
     @Column(name = "expire_time")
     @NonNull
-    private Date expire_time;
+    private Date expireTime;
 
     public static EmailToken builder ()
     {
@@ -51,13 +51,13 @@ public class EmailToken
 
     public EmailToken expireMinutes (Integer minutes)
     {
-        this.setExpire_time(new Date(Calendar.getInstance().getTimeInMillis() + (1000 * 60 * minutes)));
+        this.setExpireTime(new Date(Calendar.getInstance().getTimeInMillis() + (1000 * 60 * minutes)));
         return this;
     }
 
     public EmailToken build ()
     {
-        if (this.expire_time == null)
+        if (this.expireTime == null)
             this.expireMinutes(5);
         return this;
     }

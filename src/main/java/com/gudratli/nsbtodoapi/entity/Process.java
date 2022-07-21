@@ -30,13 +30,13 @@ public class Process
     private Task task;
     @Column(name = "start_date")
     @NonNull
-    private Date start_date;
+    private Date startDate;
     @Column(name = "deadline")
     @NonNull
     private Date deadline;
     @Column(name = "end_date")
     @NonNull
-    private Date end_date;
+    private Date endDate;
     @JoinColumn(name = "status_id", referencedColumnName = "status_id")
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
