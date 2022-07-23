@@ -44,7 +44,7 @@ public class CountryServiceImpl implements CountryService
     @Override
     public Country getByName (String name)
     {
-        List<Country> countries = countryRepository.findByNameContaining(name);
+        List<Country> countries = countryRepository.findByName(name);
         return (countries.size() > 0) ? countries.get(0) : null;
     }
 

@@ -1,12 +1,12 @@
 package com.gudratli.nsbtodoapi.controller;
 
+import com.gudratli.nsbtodoapi.dto.Converter;
 import com.gudratli.nsbtodoapi.dto.RegionDTO;
 import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.Region;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRegionException;
 import com.gudratli.nsbtodoapi.service.inter.RegionService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class RegionController
 {
     private final RegionService regionService;
-    private final ModelMapper modelMapper;
+    private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
     public ResponseEntity<ResponseDTO<List<RegionDTO>>> getAll ()
@@ -27,7 +27,7 @@ public class RegionController
         List<Region> regions = regionService.getAll();
         List<RegionDTO> regionDTOs = new ArrayList<>();
 
-        regions.forEach(region -> regionDTOs.add(modelMapper.map(region, RegionDTO.class)));
+        regions.forEach(region -> regionDTOs.add(converter.toRegionDTO(region)));
 
         ResponseDTO<List<RegionDTO>> responseDTO = new ResponseDTO<>(regionDTOs);
         responseDTO.setSuccessMessage("Successfully fetched all data.");
@@ -58,7 +58,7 @@ public class RegionController
         List<Region> regions = regionService.getByNameContaining(name);
         List<RegionDTO> regionDTOs = new ArrayList<>();
 
-        regions.forEach(region -> regionDTOs.add(modelMapper.map(region, RegionDTO.class)));
+        regions.forEach(region -> regionDTOs.add(converter.toRegionDTO(region)));
 
         ResponseDTO<List<RegionDTO>> responseDTO = new ResponseDTO<>(regionDTOs);
         responseDTO.setSuccessMessage("Successfully fetched data with this name containing");
@@ -69,11 +69,14 @@ public class RegionController
     @PostMapping()
     public ResponseEntity<ResponseDTO<RegionDTO>> add (@RequestBody RegionDTO regionDTO)
     {
-        Region region = modelMapper.map(regionDTO, Region.class);
-        ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>(regionDTO);
+        Region region = converter.toRegion(regionDTO);
+        region.setId(null);
+
+        ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>();
         try
         {
             regionService.add(region);
+            responseDTO.setObject(converter.toRegionDTO(region));
             responseDTO.setSuccessMessage("Successfully added new Region.");
         } catch (DuplicateRegionException e)
         {
@@ -83,19 +86,19 @@ public class RegionController
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseDTO<RegionDTO>> update (@RequestBody RegionDTO regionDTO, @PathVariable Integer id)
+    @PutMapping()
+    public ResponseEntity<ResponseDTO<RegionDTO>> update (@RequestBody RegionDTO regionDTO)
     {
-        Region region = regionService.getById(id);
+        Region region = converter.toRegion(regionDTO);
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>(regionDTO);
+
         if (region == null)
         {
             responseDTO.setErrorCode(404);
             responseDTO.setErrorMessage("There is not any region with this id.");
             return ResponseEntity.ok(responseDTO);
         }
-        region = modelMapper.map(regionDTO, Region.class);
-        region.setId(id);
+
         try
         {
             regionService.update(region);
@@ -122,7 +125,7 @@ public class RegionController
         }
 
         regionService.remove(id);
-        responseDTO.setObject(modelMapper.map(region, RegionDTO.class));
+        responseDTO.setObject(converter.toRegionDTO(region));
         responseDTO.setSuccessMessage("Successfully deleted region with id: " + id);
         return ResponseEntity.ok(responseDTO);
     }
@@ -132,7 +135,7 @@ public class RegionController
         ResponseDTO<RegionDTO> responseDTO;
         if (region != null)
         {
-            RegionDTO regionDTO = modelMapper.map(region, RegionDTO.class);
+            RegionDTO regionDTO = converter.toRegionDTO(region);
             responseDTO = new ResponseDTO<>(regionDTO);
             responseDTO.setSuccessMessage("Region successfully fetched.");
         } else

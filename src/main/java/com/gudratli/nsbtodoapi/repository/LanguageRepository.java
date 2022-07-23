@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface LanguageRepository extends JpaRepository<Language, Integer>
 {
-    List<Language> findByNameContaining(String name);
+    List<Language> findByName (String name);
+
+    List<Language> findByNameContaining (String name);
 }

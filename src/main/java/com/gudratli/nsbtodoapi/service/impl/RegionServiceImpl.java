@@ -36,7 +36,7 @@ public class RegionServiceImpl implements RegionService
     @Override
     public Region getByName (String name)
     {
-        List<Region> regions = regionRepository.findByNameContaining(name);
+        List<Region> regions = regionRepository.findByName(name);
         return (regions.size() > 0) ? regions.get(0) : null;
     }
 

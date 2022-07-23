@@ -36,7 +36,7 @@ public class LanguageServiceImpl implements LanguageService
     @Override
     public Language getByName (String name)
     {
-        List<Language> languages = languageRepository.findByNameContaining(name);
+        List<Language> languages = languageRepository.findByName(name);
         return (languages.size() > 0) ? languages.get(0) : null;
     }
 

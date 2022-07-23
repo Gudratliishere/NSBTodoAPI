@@ -8,6 +8,8 @@ import java.util.List;
 public interface EmailTokenRepository extends JpaRepository<EmailToken, Integer>
 {
     List<EmailToken> findByEmail (String email);
+
     List<EmailToken> findByEmailAndStatus (String email, Boolean status);
+
     EmailToken findByEmailAndStatusAndToken (String email, Boolean status, String token);
 }
