@@ -7,10 +7,11 @@ import java.util.Date;
 @Data
 public class ProcessDTO
 {
-    private UserDTO userDTO;
-    private TaskDTO taskDTO;
+    private Integer id;
+    private Integer userId;
+    private Integer taskId;
     private Date startDate;
     private Date deadline;
     private Date endDate;
-    private StatusDTO statusDTO;
+    private Integer statusId;
 }

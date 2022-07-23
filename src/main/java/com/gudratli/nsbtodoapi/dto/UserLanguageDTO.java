@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class UserLanguageDTO
 {
-    private UserDTO userDTO;
-    private LanguageDTO languageDTO;
+    private Integer id;
+    private Integer userId;
+    private Integer languageId;
     private Integer level;
 }

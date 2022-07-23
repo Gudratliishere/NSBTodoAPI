@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class RegionDTO
 {
-    String name;
+    private Integer id;
+    private String name;
 }

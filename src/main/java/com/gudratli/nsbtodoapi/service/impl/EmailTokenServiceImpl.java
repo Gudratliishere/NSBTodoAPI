@@ -79,6 +79,6 @@ public class EmailTokenServiceImpl implements EmailTokenService
     @Override
     public Boolean isExpired (EmailToken emailToken)
     {
-        return !emailToken.getExpire_time().after(new Date());
+        return !emailToken.getExpireTime().after(new Date());
     }
 }

@@ -2,6 +2,7 @@ package com.gudratli.nsbtodoapi.repository;
 
 import com.gudratli.nsbtodoapi.NsbTodoApiApplication;
 import com.gudratli.nsbtodoapi.entity.Country;
+import com.gudratli.nsbtodoapi.entity.Region;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.gudratli.nsbtodoapi.util.Entities.getCountry;
-import static com.gudratli.nsbtodoapi.util.Entities.getCountryList;
+import static com.gudratli.nsbtodoapi.util.Entities.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -23,6 +23,9 @@ class CountryRepositoryTest
 {
     @Autowired
     private CountryRepository countryRepository;
+
+    @Autowired
+    private RegionRepository regionRepository;
 
     @Test
     public void testFindById ()
@@ -69,6 +72,21 @@ class CountryRepositoryTest
         if (actual != null)
         {
             actual.setName("RussiaUpdated");
+            actual = countryRepository.save(actual);
+        }
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testUpdateCountry_whenRegionNull ()
+    {
+        Country expected = getCountry("RussiaUpdated", 2);
+        Country actual = countryRepository.findById(2).orElse(null);
+        if (actual != null)
+        {
+            actual.setName("RussiaUpdated");
+            actual.setRegion(null);
             actual = countryRepository.save(actual);
         }
 

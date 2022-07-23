@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/country")
@@ -20,6 +23,16 @@ public class CountryController
 {
     private final CountryService countryService;
     private final ModelMapper modelMapper;
+
+    @GetMapping(value = {"/getAll", ""})
+    public ResponseEntity<ResponseDTO<List<CountryDTO>>> getAll ()
+    {
+        List<Country> countries = countryService.getAll();
+        List<CountryDTO> countryDTOs = new ArrayList<>();
+        ResponseDTO<List<CountryDTO>> responseDTO = new ResponseDTO<>(countryDTOs);
+
+        return ResponseEntity.ok(responseDTO);
+    }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
     public ResponseEntity<ResponseDTO<CountryDTO>> getById (@PathVariable Integer id)
@@ -38,6 +51,22 @@ public class CountryController
             responseDTO.setObject(countryDTO);
             responseDTO.setSuccessMessage("Successfully fetched country.");
         }
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/getByName/{name}")
+    public ResponseEntity<ResponseDTO<CountryDTO>> getByName (@PathVariable String name)
+    {
+        Country country = countryService.getByName(name);
+        ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();
+        if (country == null)
+        {
+            responseDTO.setErrorCode(404);
+            responseDTO.setErrorMessage("There is not country with this id.");
+        } else
+        {
+        }
+
         return ResponseEntity.ok(responseDTO);
     }
 }

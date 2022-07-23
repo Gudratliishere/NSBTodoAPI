@@ -82,7 +82,7 @@ class EmailTokenServiceImplTest
     {
         EmailToken emailToken = new EmailToken("orxan@gmail", "6564", parse("2022-07-22 15:45:33"));
         EmailToken expected = getEmailToken(emailToken.getEmail(), emailToken.getToken(),
-                emailToken.getExpire_time(), 5);
+                emailToken.getExpireTime(), 5);
         when(emailTokenRepository.save(emailToken)).thenReturn(expected);
 
         EmailToken actual = emailTokenService.add(emailToken);
@@ -136,7 +136,7 @@ class EmailTokenServiceImplTest
     public void testIsExpired_itShouldReturnTrue ()
     {
         EmailToken emailToken = getEmailToken();
-        emailToken.setExpire_time(parse("2022-05-27 09:05:22"));
+        emailToken.setExpireTime(parse("2022-05-27 09:05:22"));
 
         Boolean actual = emailTokenService.isExpired(emailToken);
 
@@ -147,7 +147,7 @@ class EmailTokenServiceImplTest
     public void testIsExpired_itShouldReturnFalse ()
     {
         EmailToken emailToken = getEmailToken();
-        emailToken.setExpire_time(parse("2022-05-27 16:05:22"));
+        emailToken.setExpireTime(parse("2022-05-27 16:05:22"));
 
         Boolean actual = emailTokenService.isExpired(emailToken);
 

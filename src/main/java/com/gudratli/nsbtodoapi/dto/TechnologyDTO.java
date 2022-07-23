@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class TechnologyDTO
 {
+    private Integer id;
     private String name;
 }

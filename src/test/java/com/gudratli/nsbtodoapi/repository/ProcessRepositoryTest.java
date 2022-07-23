@@ -79,8 +79,8 @@ class ProcessRepositoryTest
         Process process = processRepository.findById(2).orElse(null);
         if (process != null)
         {
-            process.setStart_date(parse("2024-03-15 00:05:21"));
-            process.setEnd_date(parse("2024-08-15 00:05:21"));
+            process.setStartDate(parse("2024-03-15 00:05:21"));
+            process.setEndDate(parse("2024-08-15 00:05:21"));
             processRepository.save(process);
         }
 

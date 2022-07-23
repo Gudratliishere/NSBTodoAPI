@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class UserTechnologyDTO
 {
-    private UserDTO userDTO;
-    private TechnologyDTO technologyDTO;
+    private Integer id;
+    private Integer userId;
+    private Integer technologyId;
     private Integer level;
 }
