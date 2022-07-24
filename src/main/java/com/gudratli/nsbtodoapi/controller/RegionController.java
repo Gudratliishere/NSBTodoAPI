@@ -89,7 +89,7 @@ public class RegionController
     @PutMapping()
     public ResponseEntity<ResponseDTO<RegionDTO>> update (@RequestBody RegionDTO regionDTO)
     {
-        Region region = converter.toRegion(regionDTO);
+        Region region = regionService.getById(regionDTO.getId());
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>(regionDTO);
 
         if (region == null)
@@ -98,6 +98,8 @@ public class RegionController
             responseDTO.setErrorMessage("There is not any region with this id.");
             return ResponseEntity.ok(responseDTO);
         }
+
+        converter.toRegion(region, regionDTO);
 
         try
         {

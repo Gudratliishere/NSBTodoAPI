@@ -35,6 +35,12 @@ public class Converter
         country.setRegion(regionService.getById(countryDTO.getRegionId()));
         return country;
     }
+
+    public void toCountry (Country country, CountryDTO countryDTO)
+    {
+        modelMapper.map(countryDTO, country);
+        country.setRegion(regionService.getById(countryDTO.getRegionId()));
+    }
     //Country ends
 
     //Conversation converter
@@ -55,6 +61,13 @@ public class Converter
 
         return conversation;
     }
+
+    public void toConversation (Conversation conversation, ConversationDTO conversationDTO)
+    {
+        modelMapper.map(conversationDTO, conversation);
+        conversation.setProcess(processService.getById(conversationDTO.getProcessId()));
+        conversation.setUser(userService.getById(conversationDTO.getUserId()));
+    }
     //Conversation ends
 
     //EmailToken
@@ -67,6 +80,11 @@ public class Converter
     {
         return modelMapper.map(emailTokenDTO, EmailToken.class);
     }
+
+    public void toEmailToken (EmailToken emailToken, EmailTokenDTO emailTokenDTO)
+    {
+        modelMapper.map(emailTokenDTO, emailToken);
+    }
     //EmailToken ends
 
     //Language
@@ -78,6 +96,11 @@ public class Converter
     public Language toLanguage (LanguageDTO languageDTO)
     {
         return modelMapper.map(languageDTO, Language.class);
+    }
+
+    public void toLanguage (Language language, LanguageDTO languageDTO)
+    {
+        modelMapper.map(languageDTO, language);
     }
     //Language ends
 
@@ -101,6 +124,14 @@ public class Converter
 
         return process;
     }
+
+    public void toProcess (Process process, ProcessDTO processDTO)
+    {
+        modelMapper.map(processDTO, process);
+        process.setUser(userService.getById(processDTO.getUserId()));
+        process.setTask(taskService.getById(processDTO.getTaskId()));
+        process.setStatus(statusService.getById(processDTO.getStatusId()));
+    }
     //Process ends
 
     //Region converter
@@ -112,6 +143,11 @@ public class Converter
     public Region toRegion (RegionDTO regionDTO)
     {
         return modelMapper.map(regionDTO, Region.class);
+    }
+
+    public void toRegion (Region region, RegionDTO regionDTO)
+    {
+        modelMapper.map(regionDTO, region);
     }
     //Region ends
 
@@ -125,6 +161,11 @@ public class Converter
     {
         return modelMapper.map(roleDTO, Role.class);
     }
+
+    public void toRole (Role role, RoleDTO roleDTO)
+    {
+        modelMapper.map(roleDTO, role);
+    }
     //Role ends
 
     //Status
@@ -136,6 +177,11 @@ public class Converter
     public Status toStatus (StatusDTO statusDTO)
     {
         return modelMapper.map(statusDTO, Status.class);
+    }
+
+    public void toStatus (Status status, StatusDTO statusDTO)
+    {
+        modelMapper.map(statusDTO, status);
     }
     //Status ends
 
@@ -149,6 +195,11 @@ public class Converter
     {
         return modelMapper.map(taskDTO, Task.class);
     }
+
+    public void toTask (Task task, TaskDTO taskDTO)
+    {
+        modelMapper.map(taskDTO, task);
+    }
     //Task ends
 
     //Technology
@@ -160,6 +211,11 @@ public class Converter
     public Technology toTechnology (TechnologyDTO technologyDTO)
     {
         return modelMapper.map(technologyDTO, Technology.class);
+    }
+
+    public void toTechnology (Technology technology, TechnologyDTO technologyDTO)
+    {
+        modelMapper.map(technologyDTO, technology);
     }
     //Technology ends
 
@@ -174,11 +230,16 @@ public class Converter
 
     public User toUser (UserDTO userDTO)
     {
-        User user = userService.getById(userDTO.getId());
-        modelMapper.map(userDTO, user);
+        User user = modelMapper.map(userDTO, User.class);
         user.setCountry(countryService.getById(userDTO.getCountryId()));
 
         return user;
+    }
+
+    public void toUser (User user, UserDTO userDTO)
+    {
+        modelMapper.map(userDTO, user);
+        user.setCountry(countryService.getById(userDTO.getCountryId()));
     }
     //User ends
 
@@ -200,6 +261,13 @@ public class Converter
 
         return userLanguage;
     }
+
+    public void toUserLanguage (UserLanguage userLanguage, UserLanguageDTO userLanguageDTO)
+    {
+        modelMapper.map(userLanguageDTO, userLanguage);
+        userLanguage.setLanguage(languageService.getById(userLanguageDTO.getLanguageId()));
+        userLanguage.setUser(userService.getById(userLanguageDTO.getUserId()));
+    }
     //UserLanguage ends
 
     //UserTechnology
@@ -219,6 +287,13 @@ public class Converter
         userTechnology.setUser(userService.getById(userTechnologyDTO.getUserId()));
 
         return userTechnology;
+    }
+
+    public void toUserTechnology (UserTechnology userTechnology, UserTechnologyDTO userTechnologyDTO)
+    {
+        modelMapper.map(userTechnologyDTO, userTechnology);
+        userTechnology.setTechnology(technologyService.getById(userTechnologyDTO.getTechnologyId()));
+        userTechnology.setUser(userService.getById(userTechnologyDTO.getUserId()));
     }
     //UserTechnology ends
 }

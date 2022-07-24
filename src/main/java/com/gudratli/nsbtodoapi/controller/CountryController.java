@@ -86,7 +86,7 @@ public class CountryController
     @PutMapping()
     public ResponseEntity<ResponseDTO<CountryDTO>> update (@RequestBody CountryDTO countryDTO)
     {
-        Country country = converter.toCountry(countryDTO);
+        Country country = countryService.getById(countryDTO.getId());
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();
 
         if (country == null)
@@ -95,6 +95,8 @@ public class CountryController
             responseDTO.setErrorMessage("There is not country with this id.");
             return ResponseEntity.ok(responseDTO);
         }
+
+        converter.toCountry(country, countryDTO);
 
         try
         {
