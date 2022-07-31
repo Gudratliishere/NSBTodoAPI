@@ -64,12 +64,10 @@ public class LanguageController
         try
         {
             language = languageService.add(language);
-            responseDTO.setObject(converter.toLanguageDTO(language));
-            responseDTO.setSuccessMessage("Successfully inserted data.");
+            responseDTO.successfullyInserted(converter.toLanguageDTO(language));
         } catch (DuplicateLanguageException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -82,23 +80,17 @@ public class LanguageController
         ResponseDTO<LanguageDTO> responseDTO = new ResponseDTO<>();
 
         if (language == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not language with this id.");
-            return ResponseEntity.ok(responseDTO);
-        }
+            return ResponseEntity.ok(responseDTO.notFound("language", "id"));
 
         converter.toLanguage(language, languageDTO);
 
         try
         {
             language = languageService.update(language);
-            responseDTO.setObject(converter.toLanguageDTO(language));
-            responseDTO.setSuccessMessage("Successfully updated data.");
+            responseDTO.successfullyUpdated(converter.toLanguageDTO(language));
         } catch (DuplicateLanguageException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -111,14 +103,11 @@ public class LanguageController
         ResponseDTO<LanguageDTO> responseDTO = new ResponseDTO<>();
 
         if (language == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not language with this id.");
-        } else
+            responseDTO.notFound("language", "id.");
+        else
         {
             languageService.remove(id);
-            responseDTO.setObject(converter.toLanguageDTO(language));
-            responseDTO.setSuccessMessage("Successfully deleted.");
+            responseDTO.successfullyDeleted(converter.toLanguageDTO(language));
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -130,8 +119,8 @@ public class LanguageController
 
         languages.forEach(language -> languageDTOs.add(converter.toLanguageDTO(language)));
 
-        ResponseDTO<List<LanguageDTO>> responseDTO = new ResponseDTO<>(languageDTOs);
-        responseDTO.setSuccessMessage("Successfully fetched data.");
+        ResponseDTO<List<LanguageDTO>> responseDTO = new ResponseDTO<>();
+        responseDTO.successfullyFetched(languageDTOs);
 
         return responseDTO;
     }
@@ -141,14 +130,9 @@ public class LanguageController
         ResponseDTO<LanguageDTO> responseDTO = new ResponseDTO<>();
 
         if (language == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not language with this " + parameter);
-        } else
-        {
-            responseDTO.setObject(converter.toLanguageDTO(language));
-            responseDTO.setSuccessMessage("Successfully fetched data.");
-        }
+            responseDTO.notFound("language", parameter);
+        else
+            responseDTO.successfullyFetched(converter.toLanguageDTO(language));
 
         return responseDTO;
     }

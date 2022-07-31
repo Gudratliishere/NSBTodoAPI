@@ -29,8 +29,8 @@ public class RoleController
 
         roleList.forEach(role -> roleDTOs.add(converter.toRoleDTO(role)));
 
-        ResponseDTO<List<RoleDTO>> responseDTO = new ResponseDTO<>(roleDTOs);
-        responseDTO.setSuccessMessage("Successfully fetched all data.");
+        ResponseDTO<List<RoleDTO>> responseDTO = new ResponseDTO<>();
+        responseDTO.successfullyFetched(roleDTOs);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -56,17 +56,16 @@ public class RoleController
     {
         Role role = converter.toRole(roleDTO);
         role.setId(null);
+
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>(roleDTO);
 
         try
         {
             role = roleService.add(role);
-            responseDTO.setObject(converter.toRoleDTO(role));
-            responseDTO.setSuccessMessage("Successfully inserted new data.");
+            responseDTO.successfullyInserted(converter.toRoleDTO(role));
         } catch (DuplicateRoleException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -79,23 +78,17 @@ public class RoleController
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>(roleDTO);
 
         if (role == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not role with this id.");
-            return ResponseEntity.ok(responseDTO);
-        }
+            responseDTO.notFound("role", "id.");
 
         converter.toRole(role, roleDTO);
 
         try
         {
             role = roleService.update(role);
-            responseDTO.setObject(converter.toRoleDTO(role));
-            responseDTO.setSuccessMessage("Successfully updated.");
+            responseDTO.successfullyUpdated(converter.toRoleDTO(role));
         } catch (DuplicateRoleException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -108,14 +101,11 @@ public class RoleController
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>();
 
         if (role == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not role with this id.");
-        } else
+            responseDTO.notFound("role", "id.");
+        else
         {
             roleService.remove(id);
-            responseDTO.setObject(converter.toRoleDTO(role));
-            responseDTO.setSuccessMessage("Successfully deleted.");
+            responseDTO.successfullyDeleted(converter.toRoleDTO(role));
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -125,14 +115,9 @@ public class RoleController
     {
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>();
         if (role == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not Role with this " + parameter);
-        } else
-        {
-            responseDTO.setObject(converter.toRoleDTO(role));
-            responseDTO.setSuccessMessage("Successfully fetched role.");
-        }
+            responseDTO.notFound("role", parameter);
+        else
+            responseDTO.successfullyFetched(converter.toRoleDTO(role));
 
         return responseDTO;
     }

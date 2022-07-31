@@ -29,8 +29,8 @@ public class StatusController
 
         statuses.forEach(status -> statusDTOs.add(converter.toStatusDTO(status)));
 
-        ResponseDTO<List<StatusDTO>> responseDTO = new ResponseDTO<>(statusDTOs);
-        responseDTO.setSuccessMessage("Successfully fetched all data.");
+        ResponseDTO<List<StatusDTO>> responseDTO = new ResponseDTO<>();
+        responseDTO.successfullyFetched(statusDTOs);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -62,12 +62,10 @@ public class StatusController
         try
         {
             status = statusService.add(status);
-            responseDTO.setObject(converter.toStatusDTO(status));
-            responseDTO.setSuccessMessage("Successfully inserted data.");
+            responseDTO.successfullyInserted(converter.toStatusDTO(status));
         } catch (DuplicateStatusException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -80,23 +78,17 @@ public class StatusController
         ResponseDTO<StatusDTO> responseDTO = new ResponseDTO<>(statusDTO);
 
         if (status == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not status with this id.");
-            return ResponseEntity.ok(responseDTO);
-        }
+            return ResponseEntity.ok(responseDTO.notFound("status", "id."));
 
         converter.toStatus(status, statusDTO);
 
         try
         {
             status = statusService.update(status);
-            responseDTO.setObject(converter.toStatusDTO(status));
-            responseDTO.setSuccessMessage("Successfully updated data.");
+            responseDTO.successfullyUpdated(converter.toStatusDTO(status));
         } catch (DuplicateStatusException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -109,14 +101,11 @@ public class StatusController
         ResponseDTO<StatusDTO> responseDTO = new ResponseDTO<>();
 
         if (status == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not status with this id.");
-        } else
+            responseDTO.notFound("status", "id.");
+        else
         {
             statusService.remove(id);
-            responseDTO.setObject(converter.toStatusDTO(status));
-            responseDTO.setSuccessMessage("Successfully deleted.");
+            responseDTO.successfullyDeleted(converter.toStatusDTO(status));
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -127,14 +116,9 @@ public class StatusController
         ResponseDTO<StatusDTO> responseDTO = new ResponseDTO<>();
 
         if (status == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not status with this " + parameter);
-        } else
-        {
-            responseDTO.setObject(converter.toStatusDTO(status));
-            responseDTO.setSuccessMessage("Successfully fetched data.");
-        }
+            responseDTO.notFound("status", parameter);
+        else
+            responseDTO.successfullyFetched(converter.toStatusDTO(status));
 
         return responseDTO;
     }

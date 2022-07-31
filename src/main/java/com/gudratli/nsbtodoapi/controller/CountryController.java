@@ -72,12 +72,10 @@ public class CountryController
         try
         {
             country = countryService.add(country);
-            responseDTO.setObject(converter.toCountryDTO(country));
-            responseDTO.setSuccessMessage("Successfully inserted.");
+            responseDTO.successfullyInserted(converter.toCountryDTO(country));
         } catch (DuplicateCountryException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -90,23 +88,17 @@ public class CountryController
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();
 
         if (country == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not country with this id.");
-            return ResponseEntity.ok(responseDTO);
-        }
+            return ResponseEntity.ok(responseDTO.notFound("language", "id"));
 
         converter.toCountry(country, countryDTO);
 
         try
         {
             country = countryService.update(country);
-            responseDTO.setObject(converter.toCountryDTO(country));
-            responseDTO.setSuccessMessage("Successfully updated.");
+            responseDTO.successfullyUpdated(converter.toCountryDTO(country));
         } catch (DuplicateCountryException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -119,14 +111,11 @@ public class CountryController
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();
 
         if (country == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not country with this id.");
-        } else
+            responseDTO.notFound("language", "id");
+        else
         {
             countryService.remove(id);
-            responseDTO.setObject(converter.toCountryDTO(country));
-            responseDTO.setSuccessMessage("Successfully deleted country.");
+            responseDTO.successfullyDeleted(converter.toCountryDTO(country));
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -138,8 +127,8 @@ public class CountryController
 
         countries.forEach(country -> countryDTOs.add(converter.toCountryDTO(country)));
 
-        ResponseDTO<List<CountryDTO>> responseDTO = new ResponseDTO<>(countryDTOs);
-        responseDTO.setSuccessMessage("Successfully fetched all data.");
+        ResponseDTO<List<CountryDTO>> responseDTO = new ResponseDTO<>();
+        responseDTO.successfullyFetched(countryDTOs);
 
         return responseDTO;
     }
@@ -148,15 +137,9 @@ public class CountryController
     {
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();
         if (country == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not country with this " + parameter);
-        } else
-        {
-            CountryDTO countryDTO = converter.toCountryDTO(country);
-            responseDTO.setObject(countryDTO);
-            responseDTO.setSuccessMessage("Successfully fetched country.");
-        }
+            responseDTO.notFound("language", parameter);
+        else
+            responseDTO.successfullyFetched(converter.toCountryDTO(country));
 
         return responseDTO;
     }

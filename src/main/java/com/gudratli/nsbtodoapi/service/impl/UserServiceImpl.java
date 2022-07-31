@@ -1,5 +1,6 @@
 package com.gudratli.nsbtodoapi.service.impl;
 
+import com.gudratli.nsbtodoapi.entity.Role;
 import com.gudratli.nsbtodoapi.entity.User;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateEmailException;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicatePhoneException;
@@ -89,6 +90,34 @@ public class UserServiceImpl implements UserService
         checkForDuplicates(user);
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User changePassword (Integer id, String password)
+    {
+        return userRepository.changePassword(id, password);
+    }
+
+    @Override
+    public User changeStatus (Integer id, Boolean status)
+    {
+        return userRepository.changeStatus(id, status);
+    }
+
+    @Override
+    public User changeBanned (Integer id, Boolean banned)
+    {
+        return userRepository.changeBanned(id, banned);
+    }
+
+    @Override
+    public User changeRole (Integer id, Integer roleId)
+    {
+        Role role = roleRepository.findById(roleId).orElse(null);
+        if (role != null)
+            return userRepository.changeRole(id, role);
+
+        return null;
     }
 
     @Override

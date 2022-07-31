@@ -25,14 +25,8 @@ public class RegionController
     public ResponseEntity<ResponseDTO<List<RegionDTO>>> getAll ()
     {
         List<Region> regions = regionService.getAll();
-        List<RegionDTO> regionDTOs = new ArrayList<>();
 
-        regions.forEach(region -> regionDTOs.add(converter.toRegionDTO(region)));
-
-        ResponseDTO<List<RegionDTO>> responseDTO = new ResponseDTO<>(regionDTOs);
-        responseDTO.setSuccessMessage("Successfully fetched all data.");
-
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok(getResponseWithList(regions));
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
@@ -56,14 +50,8 @@ public class RegionController
     public ResponseEntity<ResponseDTO<List<RegionDTO>>> getByNameContaining (@PathVariable String name)
     {
         List<Region> regions = regionService.getByNameContaining(name);
-        List<RegionDTO> regionDTOs = new ArrayList<>();
 
-        regions.forEach(region -> regionDTOs.add(converter.toRegionDTO(region)));
-
-        ResponseDTO<List<RegionDTO>> responseDTO = new ResponseDTO<>(regionDTOs);
-        responseDTO.setSuccessMessage("Successfully fetched data with this name containing");
-
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok(getResponseWithList(regions));
     }
 
     @PostMapping()
@@ -76,12 +64,10 @@ public class RegionController
         try
         {
             regionService.add(region);
-            responseDTO.setObject(converter.toRegionDTO(region));
-            responseDTO.setSuccessMessage("Successfully added new Region.");
+            responseDTO.successfullyInserted(converter.toRegionDTO(region));
         } catch (DuplicateRegionException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
         return ResponseEntity.ok(responseDTO);
     }
@@ -93,22 +79,17 @@ public class RegionController
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>(regionDTO);
 
         if (region == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not any region with this id.");
-            return ResponseEntity.ok(responseDTO);
-        }
+            return ResponseEntity.ok(responseDTO.notFound("region", "id."));
 
         converter.toRegion(region, regionDTO);
 
         try
         {
-            regionService.update(region);
-            responseDTO.setSuccessMessage("Successfully updated region.");
+            region = regionService.update(region);
+            responseDTO.successfullyUpdated(converter.toRegionDTO(region));
         } catch (DuplicateRegionException e)
         {
-            responseDTO.setErrorCode(304);
-            responseDTO.setErrorMessage(e.getMessage());
+            responseDTO.duplicateException(e.getMessage());
         }
 
         return ResponseEntity.ok(responseDTO);
@@ -119,33 +100,37 @@ public class RegionController
     {
         Region region = regionService.getById(id);
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>();
+
         if (region == null)
-        {
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not region with this id.");
-            return ResponseEntity.ok(responseDTO);
-        }
+            return ResponseEntity.ok(responseDTO.notFound("language", "id."));
 
         regionService.remove(id);
-        responseDTO.setObject(converter.toRegionDTO(region));
-        responseDTO.setSuccessMessage("Successfully deleted region with id: " + id);
+        responseDTO.successfullyDeleted(converter.toRegionDTO(region));
+
         return ResponseEntity.ok(responseDTO);
+    }
+
+    private ResponseDTO<List<RegionDTO>> getResponseWithList (List<Region> regions)
+    {
+        List<RegionDTO> regionDTOs = new ArrayList<>();
+
+        regions.forEach(region -> regionDTOs.add(converter.toRegionDTO(region)));
+
+        ResponseDTO<List<RegionDTO>> responseDTO = new ResponseDTO<>();
+        responseDTO.successfullyFetched(regionDTOs);
+
+        return responseDTO;
     }
 
     private ResponseDTO<RegionDTO> getResponseDTOWhenGetMapping (Region region, String parameter)
     {
-        ResponseDTO<RegionDTO> responseDTO;
+        ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>();
+
         if (region != null)
-        {
-            RegionDTO regionDTO = converter.toRegionDTO(region);
-            responseDTO = new ResponseDTO<>(regionDTO);
-            responseDTO.setSuccessMessage("Region successfully fetched.");
-        } else
-        {
-            responseDTO = new ResponseDTO<>();
-            responseDTO.setErrorCode(404);
-            responseDTO.setErrorMessage("There is not any region with this " + parameter);
-        }
+            responseDTO.successfullyFetched(converter.toRegionDTO(region));
+        else
+            responseDTO.notFound("region", parameter);
+
         return responseDTO;
     }
 }

@@ -31,5 +31,13 @@ public interface UserService
 
     User update (User user) throws DuplicatePhoneException, DuplicateEmailException, DuplicateUsernameException;
 
+    User changePassword (Integer id, String password);
+
+    User changeStatus (Integer id, Boolean status);
+
+    User changeBanned (Integer id, Boolean banned);
+
+    User changeRole (Integer id, Integer roleId);
+
     void remove (Integer id);
 }

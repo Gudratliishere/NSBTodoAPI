@@ -20,6 +20,7 @@ public class Converter
     private final CountryService countryService;
     private final LanguageService languageService;
     private final TechnologyService technologyService;
+    private final RoleService roleService;
 
     //Country converter
     public CountryDTO toCountryDTO (Country country)
@@ -242,6 +243,25 @@ public class Converter
         user.setCountry(countryService.getById(userDTO.getCountryId()));
     }
     //User ends
+
+    //UserAuth
+    public void toUser(User user, UserAuthDTO userAuthDTO)
+    {
+        modelMapper.map(userAuthDTO, user);
+    }
+
+    //UserCreate
+    public User toUser (UserCreateDTO userCreateDTO)
+    {
+        User user = modelMapper.map(userCreateDTO, User.class);
+        user.setCountry(countryService.getById(userCreateDTO.getCountryId()));
+        user.setRole(roleService.getById(userCreateDTO.getRoleId()));
+        user.setStatus(true);
+        user.setBanned(false);
+
+        return user;
+    }
+    //UserCreate ends
 
     //UserLanguage
     public UserLanguageDTO toUserLanguageDTO (UserLanguage userLanguage)
