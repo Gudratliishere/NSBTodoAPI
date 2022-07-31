@@ -245,7 +245,7 @@ public class Converter
     //User ends
 
     //UserAuth
-    public void toUser(User user, UserAuthDTO userAuthDTO)
+    public void toUser (User user, UserAuthDTO userAuthDTO)
     {
         modelMapper.map(userAuthDTO, user);
     }
@@ -273,20 +273,36 @@ public class Converter
         return userLanguageDTO;
     }
 
-    public UserLanguage toUserLanguage (UserLanguageDTO userLanguageDTO)
+    public UserLanguage toUserLanguage (UserLanguageDTO userLanguageDTO) throws Exception
     {
         UserLanguage userLanguage = modelMapper.map(userLanguageDTO, UserLanguage.class);
-        userLanguage.setLanguage(languageService.getById(userLanguageDTO.getLanguageId()));
-        userLanguage.setUser(userService.getById(userLanguageDTO.getUserId()));
+        User user = userService.getById(userLanguageDTO.getUserId());
+        Language language = languageService.getById(userLanguageDTO.getLanguageId());
+        checkForExistence(user, language);
+
+        userLanguage.setLanguage(language);
+        userLanguage.setUser(user);
 
         return userLanguage;
     }
 
-    public void toUserLanguage (UserLanguage userLanguage, UserLanguageDTO userLanguageDTO)
+    public void toUserLanguage (UserLanguage userLanguage, UserLanguageDTO userLanguageDTO) throws Exception
     {
         modelMapper.map(userLanguageDTO, userLanguage);
-        userLanguage.setLanguage(languageService.getById(userLanguageDTO.getLanguageId()));
-        userLanguage.setUser(userService.getById(userLanguageDTO.getUserId()));
+        User user = userService.getById(userLanguageDTO.getUserId());
+        Language language = languageService.getById(userLanguageDTO.getLanguageId());
+        checkForExistence(user, language);
+
+        userLanguage.setLanguage(language);
+        userLanguage.setUser(user);
+    }
+
+    private void checkForExistence (User user, Language language) throws Exception
+    {
+        if (user == null)
+            throw new Exception("User doesn't exists with this id.");
+        if (language == null)
+            throw new Exception("Language doesn't exists with this id.");
     }
     //UserLanguage ends
 
@@ -300,20 +316,36 @@ public class Converter
         return userTechnologyDTO;
     }
 
-    public UserTechnology toUserTechnology (UserTechnologyDTO userTechnologyDTO)
+    public UserTechnology toUserTechnology (UserTechnologyDTO userTechnologyDTO) throws Exception
     {
         UserTechnology userTechnology = modelMapper.map(userTechnologyDTO, UserTechnology.class);
-        userTechnology.setTechnology(technologyService.getById(userTechnologyDTO.getTechnologyId()));
-        userTechnology.setUser(userService.getById(userTechnologyDTO.getUserId()));
+        Technology technology = technologyService.getById(userTechnologyDTO.getTechnologyId());
+        User user = userService.getById(userTechnologyDTO.getUserId());
+        checkForExistence(user, technology);
+
+        userTechnology.setTechnology(technology);
+        userTechnology.setUser(user);
 
         return userTechnology;
     }
 
-    public void toUserTechnology (UserTechnology userTechnology, UserTechnologyDTO userTechnologyDTO)
+    public void toUserTechnology (UserTechnology userTechnology, UserTechnologyDTO userTechnologyDTO) throws Exception
     {
         modelMapper.map(userTechnologyDTO, userTechnology);
-        userTechnology.setTechnology(technologyService.getById(userTechnologyDTO.getTechnologyId()));
-        userTechnology.setUser(userService.getById(userTechnologyDTO.getUserId()));
+        Technology technology = technologyService.getById(userTechnologyDTO.getTechnologyId());
+        User user = userService.getById(userTechnologyDTO.getUserId());
+        checkForExistence(user, technology);
+
+        userTechnology.setTechnology(technology);
+        userTechnology.setUser(user);
+    }
+
+    private void checkForExistence (User user, Technology technology) throws Exception
+    {
+        if (user == null)
+            throw new Exception("User doesn't exist with this id.");
+        if (technology == null)
+            throw new Exception("Technology doesn't exist with this id.");
     }
     //UserTechnology ends
 }
