@@ -1,0 +1,138 @@
+package com.gudratli.nsbtodoapi.controller;
+
+import com.gudratli.nsbtodoapi.dto.Converter;
+import com.gudratli.nsbtodoapi.dto.ProcessDTO;
+import com.gudratli.nsbtodoapi.dto.ResponseDTO;
+import com.gudratli.nsbtodoapi.entity.Process;
+import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateProcessException;
+import com.gudratli.nsbtodoapi.service.inter.ProcessService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/process")
+public class ProcessController
+{
+    private final ProcessService processService;
+    private final Converter converter;
+
+    @GetMapping(value = {"/getAll", ""})
+    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getAll ()
+    {
+        List<Process> processes = processService.getAll();
+
+        return ResponseEntity.ok(getResponseWithList(processes));
+    }
+
+    @GetMapping("/getByUserId/{id}")
+    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByUserId (@PathVariable Integer id)
+    {
+        List<Process> processes = processService.getByUserId(id);
+
+        return ResponseEntity.ok(getResponseWithList(processes));
+    }
+
+    @GetMapping("/getByTaskId/{id}")
+    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByTaskId (@PathVariable Integer id)
+    {
+        List<Process> processes = processService.getByTaskId(id);
+
+        return ResponseEntity.ok(getResponseWithList(processes));
+    }
+
+    @GetMapping(value = {"/getById/{id}", "/{id}"})
+    public ResponseEntity<ResponseDTO<ProcessDTO>> getById (@PathVariable Integer id)
+    {
+        Process process = processService.getById(id);
+        ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>();
+
+        if (process == null)
+            return ResponseEntity.ok(responseDTO.notFound("process", "id."));
+
+        return ResponseEntity.ok(responseDTO.successfullyFetched(converter.toProcessDTO(process)));
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponseDTO<ProcessDTO>> add (@RequestBody ProcessDTO processDTO)
+    {
+        ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
+
+        Process process;
+        try
+        {
+            process = converter.toProcess(processDTO);
+        } catch (Exception e)
+        {
+            return ResponseEntity.ok(responseDTO.notFound(e.getMessage()));
+        }
+        process.setId(null);
+
+        try
+        {
+            process = processService.add(process);
+            responseDTO.successfullyInserted(converter.toProcessDTO(process));
+        } catch (DuplicateProcessException e)
+        {
+            responseDTO.duplicateException(e.getMessage());
+        }
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PutMapping
+    public ResponseEntity<ResponseDTO<ProcessDTO>> update (@RequestBody ProcessDTO processDTO)
+    {
+        ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
+
+        Process process = processService.getById(processDTO.getId());
+        if (process == null)
+            return ResponseEntity.ok(responseDTO.notFound("process", "id."));
+
+        try
+        {
+            converter.toProcess(process, processDTO);
+        } catch (Exception e)
+        {
+            return ResponseEntity.ok(responseDTO.notFound(e.getMessage()));
+        }
+
+        try
+        {
+            process = processService.update(process);
+            responseDTO.successfullyUpdated(converter.toProcessDTO(process));
+        } catch (DuplicateProcessException e)
+        {
+            responseDTO.duplicateException(e.getMessage());
+        }
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDTO<ProcessDTO>> delete (@PathVariable Integer id)
+    {
+        ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>();
+        Process process = processService.getById(id);
+        if (process == null)
+            return ResponseEntity.ok(responseDTO.notFound("process", "id."));
+
+        processService.remove(id);
+
+        return ResponseEntity.ok(responseDTO.successfullyDeleted(converter.toProcessDTO(process)));
+    }
+
+    private ResponseDTO<List<ProcessDTO>> getResponseWithList (List<Process> processes)
+    {
+        List<ProcessDTO> processDTOs = new ArrayList<>();
+
+        processes.forEach(process -> processDTOs.add(converter.toProcessDTO(process)));
+
+        ResponseDTO<List<ProcessDTO>> responseDTO = new ResponseDTO<>();
+        return responseDTO.successfullyFetched(processDTOs);
+    }
+}

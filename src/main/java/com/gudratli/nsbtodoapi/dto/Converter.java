@@ -116,22 +116,41 @@ public class Converter
         return processDTO;
     }
 
-    public Process toProcess (ProcessDTO processDTO)
+    public Process toProcess (ProcessDTO processDTO) throws Exception
     {
         Process process = modelMapper.map(processDTO, Process.class);
-        process.setUser(userService.getById(processDTO.getUserId()));
-        process.setTask(taskService.getById(processDTO.getTaskId()));
-        process.setStatus(statusService.getById(processDTO.getStatusId()));
+        fillProcess(process, processDTO);
 
         return process;
     }
 
-    public void toProcess (Process process, ProcessDTO processDTO)
+    public void toProcess (Process process, ProcessDTO processDTO) throws Exception
     {
         modelMapper.map(processDTO, process);
-        process.setUser(userService.getById(processDTO.getUserId()));
-        process.setTask(taskService.getById(processDTO.getTaskId()));
-        process.setStatus(statusService.getById(processDTO.getStatusId()));
+        fillProcess(process, processDTO);
+    }
+
+    private void checkForExistence (User user, Task task, Status status) throws Exception
+    {
+        if (user == null)
+            throw new Exception("User doesn't exist with this id.");
+        if (task == null)
+            throw new Exception("Task doesn't exist with this id.");
+        if (status == null)
+            throw new Exception("Status doesn't exist with this id.");
+    }
+
+    private void fillProcess (Process process, ProcessDTO processDTO) throws Exception
+    {
+        User user = userService.getById(processDTO.getUserId());
+        Task task = taskService.getById(processDTO.getTaskId());
+        Status status = statusService.getById(processDTO.getStatusId());
+
+        checkForExistence(user, task, status);
+
+        process.setUser(user);
+        process.setTask(task);
+        process.setStatus(status);
     }
     //Process ends
 

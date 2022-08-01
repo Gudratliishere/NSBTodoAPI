@@ -26,6 +26,14 @@ public class ResponseDTO<T>
         return this;
     }
 
+    public ResponseDTO<T> notFound (String message)
+    {
+        errorCode = 404;
+        errorMessage = message;
+
+        return this;
+    }
+
     public ResponseDTO<T> duplicateException (String message)
     {
         errorCode = 304;
