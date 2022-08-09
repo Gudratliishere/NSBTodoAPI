@@ -15,11 +15,7 @@ public interface EmailTokenService
 
     EmailToken getActiveByEmail (String email);
 
-    EmailToken add (EmailToken emailToken);
-
-    EmailToken update (EmailToken emailToken);
-
-    void remove (Integer id);
+    EmailToken generateToken (String email);
 
     void expireEmailToken (Integer id);
 

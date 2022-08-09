@@ -6,8 +6,10 @@ import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -42,28 +44,21 @@ public class EmailTokenServiceImpl implements EmailTokenService
     }
 
     @Override
-    public EmailToken add (EmailToken emailToken)
+    public EmailToken generateToken (String email)
     {
-        List<EmailToken> emailTokens = emailTokenRepository.findByEmail(emailToken.getEmail());
-        emailTokens.forEach(emailToken1 ->
+        EmailToken emailToken = new EmailToken(email, getRandomString(),
+                new Date(Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000));
+        emailToken.setStatus(true);
+
+        EmailToken activeToken = getActiveByEmail(email);
+        if (activeToken != null)
         {
-            emailToken1.setStatus(false);
-            emailTokenRepository.save(emailToken1);
-        });
+            activeToken.setStatus(false);
+            emailTokenRepository.save(activeToken);
+        }
 
-        return emailTokenRepository.save(emailToken);
-    }
-
-    @Override
-    public EmailToken update (EmailToken emailToken)
-    {
-        return emailTokenRepository.save(emailToken);
-    }
-
-    @Override
-    public void remove (Integer id)
-    {
-        emailTokenRepository.findById(id).ifPresent(emailTokenRepository::delete);
+        emailToken = emailTokenRepository.save(emailToken);
+        return emailToken;
     }
 
     @Override
@@ -80,5 +75,17 @@ public class EmailTokenServiceImpl implements EmailTokenService
     public Boolean isExpired (EmailToken emailToken)
     {
         return !emailToken.getExpireTime().after(new Date());
+    }
+
+    private String getRandomString ()
+    {
+        String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
+                + "lmnopqrstuvwxyz!@#$%&";
+        int len = 30;
+        Random rnd = new Random();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        return sb.toString();
     }
 }

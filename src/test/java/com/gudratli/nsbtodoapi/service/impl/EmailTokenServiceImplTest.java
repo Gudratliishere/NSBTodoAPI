@@ -78,47 +78,6 @@ class EmailTokenServiceImplTest
     }
 
     @Test
-    public void testAdd ()
-    {
-        EmailToken emailToken = new EmailToken("orxan@gmail", "6564", parse("2022-07-22 15:45:33"));
-        EmailToken expected = getEmailToken(emailToken.getEmail(), emailToken.getToken(),
-                emailToken.getExpireTime(), 5);
-        when(emailTokenRepository.save(emailToken)).thenReturn(expected);
-
-        EmailToken actual = emailTokenService.add(emailToken);
-
-        assertEquals(expected, actual);
-        verify(emailTokenRepository).save(emailToken);
-    }
-
-    @Test
-    public void testUpdate ()
-    {
-        EmailToken expected = getEmailToken("orxan@gmail", "6564", parse("2022-07-22 15:45:33"), 5);
-        when(emailTokenRepository.save(expected)).thenReturn(expected);
-
-        EmailToken actual = emailTokenService.update(expected);
-
-        assertEquals(expected, actual);
-        verify(emailTokenRepository).save(expected);
-    }
-
-    @Test
-    public void testRemove ()
-    {
-        EmailToken emailToken = getEmailToken();
-        when(emailTokenRepository.findById(emailToken.getId())).thenReturn(Optional.of(emailToken));
-
-        emailTokenService.remove(emailToken.getId());
-
-        when(emailTokenRepository.findById(emailToken.getId())).thenReturn(Optional.empty());
-
-        EmailToken actual = emailTokenService.getById(emailToken.getId());
-
-        assertNull(actual);
-    }
-
-    @Test
     public void testExpireEmailToken ()
     {
         EmailToken emailToken = getEmailToken();
