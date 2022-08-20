@@ -88,13 +88,13 @@ class CountryServiceImplTest
     public void testGetByName ()
     {
         Country expected = getCountry();
-        when(countryRepository.findByNameContaining(expected.getName())).thenReturn(
+        when(countryRepository.findByName(expected.getName())).thenReturn(
                 Collections.singletonList(expected));
 
         Country actual = countryService.getByName(expected.getName());
 
         assertEquals(expected, actual);
-        verify(countryRepository).findByNameContaining(expected.getName());
+        verify(countryRepository).findByName(expected.getName());
     }
 
     @Test

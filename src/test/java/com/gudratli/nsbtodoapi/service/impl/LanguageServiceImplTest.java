@@ -70,12 +70,12 @@ class LanguageServiceImplTest
     public void testGetByName ()
     {
         Language expected = getLanguage();
-        when(languageRepository.findByNameContaining(expected.getName())).thenReturn(Collections.singletonList(expected));
+        when(languageRepository.findByName(expected.getName())).thenReturn(Collections.singletonList(expected));
 
         Language actual = languageService.getByName(expected.getName());
 
         assertEquals(expected, actual);
-        verify(languageRepository).findByNameContaining(expected.getName());
+        verify(languageRepository).findByName(expected.getName());
     }
 
     @Test
@@ -84,13 +84,13 @@ class LanguageServiceImplTest
         Language language = new Language("Japan");
         Language expected = getLanguage(language.getName(), 4);
         when(languageRepository.save(language)).thenReturn(expected);
-        when(languageRepository.findByNameContaining(expected.getName())).thenReturn(Collections.emptyList());
+        when(languageRepository.findByName(expected.getName())).thenReturn(Collections.emptyList());
 
         Language actual = languageService.add(language);
 
         assertEquals(expected, actual);
         verify(languageRepository).save(language);
-        verify(languageRepository).findByNameContaining(expected.getName());
+        verify(languageRepository).findByName(expected.getName());
     }
 
     @Test
@@ -98,7 +98,7 @@ class LanguageServiceImplTest
     {
         Language language = new Language("Japan");
         Language expected = getLanguage(language.getName(), 4);
-        when(languageRepository.findByNameContaining(expected.getName())).thenReturn(Collections.singletonList(expected));
+        when(languageRepository.findByName(expected.getName())).thenReturn(Collections.singletonList(expected));
 
         try
         {
@@ -108,7 +108,7 @@ class LanguageServiceImplTest
             assertInstanceOf(DuplicateLanguageException.class, e);
         }
 
-        verify(languageRepository).findByNameContaining(expected.getName());
+        verify(languageRepository).findByName(expected.getName());
     }
 
     @Test
@@ -117,13 +117,13 @@ class LanguageServiceImplTest
         Language language = getLanguage("Japan", 3);
         Language expected = getLanguage(language.getName(), 4 + 1);
         when(languageRepository.save(language)).thenReturn(expected);
-        when(languageRepository.findByNameContaining(expected.getName())).thenReturn(Collections.emptyList());
+        when(languageRepository.findByName(expected.getName())).thenReturn(Collections.emptyList());
 
         Language actual = languageService.update(language);
 
         assertEquals(expected, actual);
         verify(languageRepository).save(language);
-        verify(languageRepository).findByNameContaining(expected.getName());
+        verify(languageRepository).findByName(expected.getName());
     }
 
     @Test
@@ -131,7 +131,7 @@ class LanguageServiceImplTest
     {
         Language language = getLanguage("Japan", 3);
         Language expected = getLanguage(language.getName(), 4);
-        when(languageRepository.findByNameContaining(expected.getName())).thenReturn(Collections.singletonList(expected));
+        when(languageRepository.findByName(expected.getName())).thenReturn(Collections.singletonList(expected));
 
         try
         {
@@ -141,7 +141,7 @@ class LanguageServiceImplTest
             assertInstanceOf(DuplicateLanguageException.class, e);
         }
 
-        verify(languageRepository).findByNameContaining(expected.getName());
+        verify(languageRepository).findByName(expected.getName());
     }
 
     @Test

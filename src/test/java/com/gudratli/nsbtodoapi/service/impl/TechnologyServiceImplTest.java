@@ -70,13 +70,13 @@ class TechnologyServiceImplTest
     public void testGetByName ()
     {
         Technology expected = getTechnology();
-        when(technologyRepository.findByNameContaining(expected.getName())).thenReturn(
+        when(technologyRepository.findByName(expected.getName())).thenReturn(
                 Collections.singletonList(expected));
 
         Technology actual = technologyService.getByName(expected.getName());
 
         assertEquals(expected, actual);
-        verify(technologyRepository).findByNameContaining(expected.getName());
+        verify(technologyRepository).findByName(expected.getName());
     }
 
     @Test
@@ -85,13 +85,13 @@ class TechnologyServiceImplTest
         Technology technology = new Technology("htm");
         Technology expected = getTechnology(technology.getName(), 4);
         when(technologyRepository.save(technology)).thenReturn(expected);
-        when(technologyRepository.findByNameContaining(technology.getName())).thenReturn(Collections.emptyList());
+        when(technologyRepository.findByName(technology.getName())).thenReturn(Collections.emptyList());
 
         Technology actual = technologyService.add(technology);
 
         assertEquals(expected, actual);
         verify(technologyRepository).save(technology);
-        verify(technologyRepository).findByNameContaining(technology.getName());
+        verify(technologyRepository).findByName(technology.getName());
     }
 
     @Test
@@ -99,7 +99,7 @@ class TechnologyServiceImplTest
     {
         Technology technology = new Technology("htm");
         Technology expected = getTechnology(technology.getName(), 4);
-        when(technologyRepository.findByNameContaining(technology.getName())).thenReturn(
+        when(technologyRepository.findByName(technology.getName())).thenReturn(
                 Collections.singletonList(expected));
 
         try
@@ -110,7 +110,7 @@ class TechnologyServiceImplTest
             assertInstanceOf(DuplicateTechnologyException.class, e);
         }
 
-        verify(technologyRepository).findByNameContaining(technology.getName());
+        verify(technologyRepository).findByName(technology.getName());
     }
 
     @Test
@@ -119,13 +119,13 @@ class TechnologyServiceImplTest
         Technology technology = getTechnology("htm", 3);
         Technology expected = getTechnology(technology.getName(), technology.getId() + 1);
         when(technologyRepository.save(technology)).thenReturn(expected);
-        when(technologyRepository.findByNameContaining(technology.getName())).thenReturn(Collections.emptyList());
+        when(technologyRepository.findByName(technology.getName())).thenReturn(Collections.emptyList());
 
         Technology actual = technologyService.update(technology);
 
         assertEquals(expected, actual);
         verify(technologyRepository).save(technology);
-        verify(technologyRepository).findByNameContaining(technology.getName());
+        verify(technologyRepository).findByName(technology.getName());
     }
 
     @Test
@@ -133,7 +133,7 @@ class TechnologyServiceImplTest
     {
         Technology technology = getTechnology("htm", 3);
         Technology expected = getTechnology(technology.getName(), technology.getId() + 1);
-        when(technologyRepository.findByNameContaining(technology.getName())).thenReturn(
+        when(technologyRepository.findByName(technology.getName())).thenReturn(
                 Collections.singletonList(expected));
 
         try
@@ -144,7 +144,7 @@ class TechnologyServiceImplTest
             assertInstanceOf(DuplicateTechnologyException.class, e);
         }
 
-        verify(technologyRepository).findByNameContaining(technology.getName());
+        verify(technologyRepository).findByName(technology.getName());
     }
 
     @Test

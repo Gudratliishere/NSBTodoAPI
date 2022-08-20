@@ -190,10 +190,8 @@ public class Entities
     //Process
     public static Process getProcess ()
     {
-        Process process = new Process(getUser(), getTask(), parse("2022-03-15 00:05:21"),
+        return new Process(getUser(), getTask(), parse("2022-03-15 00:05:21"),
                 parse("2022-05-12 12:08:23"), parse("2022-08-15 00:05:21"), getStatus());
-        process.setId(1);
-        return process;
     }
 
     public static Process getProcess (String year, int id)
@@ -213,21 +211,23 @@ public class Entities
     //Conversation
     public static Conversation getConversation ()
     {
-        Conversation conversation = new Conversation(getUser(), getProcess(), "Hello", parse("2022-05-13 22:37:05"));
-        conversation.setId(1);
-        return conversation;
+        return new Conversation(getUser("Dunay", true, false, 1),
+                getProcess("2", 1), "Hello",
+                parse("2022-05-13 22:37:05"));
     }
 
     public static Conversation getConversation (String message, int id)
     {
-        Conversation conversation = new Conversation(getUser(), getProcess(), message, parse("2022-05-13 22:37:05"));
+        Conversation conversation = new Conversation(getUser("Dunay", true, false, 1),
+                getProcess("2", 1), message,
+                parse("2022-05-13 22:37:05"));
         conversation.setId(id);
         return conversation;
     }
 
     public static List<Conversation> getConversationList ()
     {
-        return Arrays.asList(getConversation(), getConversation("How", 2));
+        return Arrays.asList(getConversation("Hi", 1), getConversation("How", 2));
     }
     //Conversation end
 

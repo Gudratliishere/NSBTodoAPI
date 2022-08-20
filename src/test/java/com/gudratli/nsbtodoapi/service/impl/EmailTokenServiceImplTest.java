@@ -6,9 +6,7 @@ import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.gudratli.nsbtodoapi.util.Entities.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -106,7 +104,7 @@ class EmailTokenServiceImplTest
     public void testIsExpired_itShouldReturnFalse ()
     {
         EmailToken emailToken = getEmailToken();
-        emailToken.setExpireTime(parse("2022-05-27 16:05:22"));
+        emailToken.setExpireTime(new Date(Calendar.getInstance().getTimeInMillis() + 1000 * 60 * 10));
 
         Boolean actual = emailTokenService.isExpired(emailToken);
 

@@ -70,12 +70,12 @@ class RegionServiceImplTest
     public void testGetByName ()
     {
         Region expected = getRegion();
-        when(regionRepository.findByNameContaining("Asia")).thenReturn(Collections.singletonList(expected));
+        when(regionRepository.findByName("Asia")).thenReturn(Collections.singletonList(expected));
 
         Region actual = regionService.getByName("Asia");
 
         assertEquals(expected, actual);
-        verify(regionRepository).findByNameContaining("Asia");
+        verify(regionRepository).findByName("Asia");
     }
 
     @Test
@@ -84,13 +84,13 @@ class RegionServiceImplTest
         Region region = new Region("America");
         Region expected = getRegion("America", 3);
         when(regionRepository.save(region)).thenReturn(expected);
-        when(regionRepository.findByNameContaining("America")).thenReturn(Collections.emptyList());
+        when(regionRepository.findByName("America")).thenReturn(Collections.emptyList());
 
         Region actual = regionService.add(region);
 
         assertEquals(expected, actual);
         verify(regionRepository).save(region);
-        verify(regionRepository).findByNameContaining("America");
+        verify(regionRepository).findByName("America");
     }
 
     @Test
@@ -98,7 +98,7 @@ class RegionServiceImplTest
     {
         Region region = new Region("America");
         Region expected = getRegion("America", 3);
-        when(regionRepository.findByNameContaining("America")).thenReturn(Collections.singletonList(expected));
+        when(regionRepository.findByName("America")).thenReturn(Collections.singletonList(expected));
 
         try
         {
@@ -108,7 +108,7 @@ class RegionServiceImplTest
             assertInstanceOf(DuplicateRegionException.class, e);
         }
 
-        verify(regionRepository).findByNameContaining("America");
+        verify(regionRepository).findByName("America");
     }
 
     @Test
@@ -116,13 +116,13 @@ class RegionServiceImplTest
     {
         Region expected = getRegion("AmericaUpdated", 3);
         when(regionRepository.save(expected)).thenReturn(expected);
-        when(regionRepository.findByNameContaining("AmericaUpdated")).thenReturn(Collections.emptyList());
+        when(regionRepository.findByName("AmericaUpdated")).thenReturn(Collections.emptyList());
 
         Region actual = regionService.update(expected);
 
         assertEquals(expected, actual);
         verify(regionRepository).save(expected);
-        verify(regionRepository).findByNameContaining("AmericaUpdated");
+        verify(regionRepository).findByName("AmericaUpdated");
     }
 
     @Test
@@ -131,7 +131,7 @@ class RegionServiceImplTest
         Region region = getRegion("AmericaUpdated", 3);
         Region expected = getRegion("AmericaUpdated", 4);
 
-        when(regionRepository.findByNameContaining("AmericaUpdated")).thenReturn(Collections.singletonList(expected));
+        when(regionRepository.findByName("AmericaUpdated")).thenReturn(Collections.singletonList(expected));
 
         try
         {
@@ -141,7 +141,7 @@ class RegionServiceImplTest
             assertInstanceOf(DuplicateRegionException.class, e);
         }
 
-        verify(regionRepository).findByNameContaining("AmericaUpdated");
+        verify(regionRepository).findByName("AmericaUpdated");
 
     }
 
