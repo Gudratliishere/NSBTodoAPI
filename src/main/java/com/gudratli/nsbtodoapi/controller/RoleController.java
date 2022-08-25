@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRoleException;
 import com.gudratli.nsbtodoapi.service.inter.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class RoleController
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<RoleDTO>>> getAll ()
     {
         List<Role> roleList = roleService.getAll();
@@ -36,6 +38,7 @@ public class RoleController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<RoleDTO>> getById (@PathVariable Integer id)
     {
         Role role = roleService.getById(id);
@@ -44,6 +47,7 @@ public class RoleController
     }
 
     @GetMapping("/getByName/{name}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<RoleDTO>> getByName (@PathVariable String name)
     {
         Role role = roleService.getByName(name);
@@ -52,6 +56,7 @@ public class RoleController
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<RoleDTO>> add (@RequestBody RoleDTO roleDTO)
     {
         Role role = converter.toRole(roleDTO);
@@ -72,6 +77,7 @@ public class RoleController
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<RoleDTO>> update (@RequestBody RoleDTO roleDTO)
     {
         Role role = roleService.getById(roleDTO.getId());
@@ -95,6 +101,7 @@ public class RoleController
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<RoleDTO>> delete (@PathVariable Integer id)
     {
         Role role = roleService.getById(id);

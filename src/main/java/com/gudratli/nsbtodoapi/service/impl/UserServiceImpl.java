@@ -10,6 +10,7 @@ import com.gudratli.nsbtodoapi.repository.RoleRepository;
 import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAll ()
@@ -81,6 +83,8 @@ public class UserServiceImpl implements UserService
     {
         checkForDuplicates(user);
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
@@ -88,6 +92,8 @@ public class UserServiceImpl implements UserService
     public User update (User user) throws DuplicatePhoneException, DuplicateEmailException, DuplicateUsernameException
     {
         checkForDuplicates(user);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
     }

@@ -6,12 +6,11 @@ import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.EmailToken;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -23,6 +22,7 @@ public class EmailTokenController
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<List<EmailTokenDTO>>> getAll ()
     {
         List<EmailToken> emailTokens = emailTokenService.getAll();
@@ -31,6 +31,7 @@ public class EmailTokenController
     }
 
     @GetMapping("/getByEmail/{email}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<List<EmailTokenDTO>>> getByEmail (@PathVariable String email)
     {
         List<EmailToken> emailTokens = emailTokenService.getByEmail(email);
@@ -39,6 +40,7 @@ public class EmailTokenController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> getById (@PathVariable Integer id)
     {
         EmailToken emailToken = emailTokenService.getById(id);
@@ -47,6 +49,7 @@ public class EmailTokenController
     }
 
     @GetMapping("/getActiveByEmail/{email}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> getActiveByEmail (@PathVariable String email)
     {
         EmailToken emailToken = emailTokenService.getActiveByEmail(email);
@@ -55,6 +58,7 @@ public class EmailTokenController
     }
 
     @GetMapping("/isExpired/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<Boolean>> isExpired (@PathVariable Integer id)
     {
         EmailToken emailToken = emailTokenService.getById(id);
@@ -77,6 +81,7 @@ public class EmailTokenController
     }
 
     @PostMapping("/{email}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> generateToken (@PathVariable String email)
     {
         EmailToken emailToken = emailTokenService.generateToken(email);
@@ -88,6 +93,7 @@ public class EmailTokenController
     }
 
     @PutMapping("/expireEmailToken/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> expire (@PathVariable Integer id)
     {
         EmailToken emailToken = emailTokenService.getById(id);

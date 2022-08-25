@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateException;
 import com.gudratli.nsbtodoapi.service.inter.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class UserController
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getAll ()
     {
         List<User> users = userService.getAll();
@@ -30,6 +32,7 @@ public class UserController
     }
 
     @GetMapping("/getByNameContaining/{name}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getByNameContaining (@PathVariable String name)
     {
         List<User> users = userService.getByNameContaining(name);
@@ -38,6 +41,7 @@ public class UserController
     }
 
     @GetMapping("/getBySurnameContaining/{surname}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getBySurnameContaining (@PathVariable String surname)
     {
         List<User> users = userService.getBySurnameContaining(surname);
@@ -46,6 +50,7 @@ public class UserController
     }
 
     @GetMapping("/getByCountryId/{countryId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getByCountryId (@PathVariable Integer countryId)
     {
         List<User> users = userService.getByCountryId(countryId);
@@ -54,6 +59,7 @@ public class UserController
     }
 
     @GetMapping("/getByRoleId/{roleId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getByRoleId (@PathVariable Integer roleId)
     {
         List<User> users = userService.getByRoleId(roleId);
@@ -62,6 +68,7 @@ public class UserController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<UserDTO>> getById (@PathVariable Integer id)
     {
         User user = userService.getById(id);
@@ -70,6 +77,7 @@ public class UserController
     }
 
     @GetMapping("/getByPhone/{phone}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<UserDTO>> getByPhone (@PathVariable String phone)
     {
         User user = userService.getByPhone(phone);
@@ -78,6 +86,7 @@ public class UserController
     }
 
     @GetMapping("/getByEmail/{email}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<UserDTO>> getByEmail (@PathVariable String email)
     {
         User user = userService.getByEmail(email);
@@ -86,6 +95,7 @@ public class UserController
     }
 
     @GetMapping("/getByUsername/{username}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<UserDTO>> getByUsername (@PathVariable String username)
     {
         User user = userService.getByUsername(username);
@@ -94,6 +104,7 @@ public class UserController
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<UserDTO>> update (@RequestBody UserDTO userDTO)
     {
         User user = userService.getById(userDTO.getId());
@@ -117,6 +128,7 @@ public class UserController
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<UserDTO>> delete (@PathVariable Integer id)
     {
         User user = userService.getById(id);

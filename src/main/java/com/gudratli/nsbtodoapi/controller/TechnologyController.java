@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateTechnologyException;
 import com.gudratli.nsbtodoapi.service.inter.TechnologyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/technology")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class TechnologyController
 {
     private final TechnologyService technologyService;

@@ -7,6 +7,7 @@ import com.gudratli.nsbtodoapi.entity.Conversation;
 import com.gudratli.nsbtodoapi.service.inter.ConversationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/conversation")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class ConversationController
 {
     private final ConversationService conversationService;

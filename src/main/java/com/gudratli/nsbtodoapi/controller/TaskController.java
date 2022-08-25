@@ -7,6 +7,7 @@ import com.gudratli.nsbtodoapi.entity.Task;
 import com.gudratli.nsbtodoapi.service.inter.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class TaskController
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<List<TaskDTO>>> getAll ()
     {
         List<Task> tasks = taskService.getAll();
@@ -29,6 +31,7 @@ public class TaskController
     }
 
     @GetMapping("/getByNameContaining/{name}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<TaskDTO>>> getByNameContaining (@PathVariable String name)
     {
         List<Task> tasks = taskService.getByNameContaining(name);
@@ -37,6 +40,7 @@ public class TaskController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<TaskDTO>> getById (@PathVariable Integer id)
     {
         Task task = taskService.getById(id);
@@ -51,6 +55,7 @@ public class TaskController
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<TaskDTO>> add (@RequestBody TaskDTO taskDTO)
     {
         Task task = converter.toTask(taskDTO);
@@ -65,6 +70,7 @@ public class TaskController
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<TaskDTO>> update (@RequestBody TaskDTO taskDTO)
     {
         Task task = taskService.getById(taskDTO.getId());
@@ -83,6 +89,7 @@ public class TaskController
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<TaskDTO>> delete (@PathVariable Integer id)
     {
         Task task = taskService.getById(id);

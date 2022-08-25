@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateStatusException;
 import com.gudratli.nsbtodoapi.service.inter.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class StatusController
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<StatusDTO>>> getAll ()
     {
         List<Status> statuses = statusService.getAll();
@@ -36,6 +38,7 @@ public class StatusController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<StatusDTO>> getById (@PathVariable Integer id)
     {
         Status status = statusService.getById(id);
@@ -44,6 +47,7 @@ public class StatusController
     }
 
     @GetMapping("/getByName/{name}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<StatusDTO>> getByName (@PathVariable String name)
     {
         Status status = statusService.getByName(name);
@@ -52,6 +56,7 @@ public class StatusController
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<StatusDTO>> add (@RequestBody StatusDTO statusDTO)
     {
         Status status = converter.toStatus(statusDTO);
@@ -72,6 +77,7 @@ public class StatusController
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<StatusDTO>> update (@RequestBody StatusDTO statusDTO)
     {
         Status status = statusService.getById(statusDTO.getId());
@@ -95,6 +101,7 @@ public class StatusController
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<StatusDTO>> delete (@PathVariable Integer id)
     {
         Status status = statusService.getById(id);

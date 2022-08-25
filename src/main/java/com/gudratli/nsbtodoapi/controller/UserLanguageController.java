@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateUserLanguageExceptio
 import com.gudratli.nsbtodoapi.service.inter.UserLanguageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/userLanguage")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class UserLanguageController
 {
     private final UserLanguageService userLanguageService;

@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateProcessException;
 import com.gudratli.nsbtodoapi.service.inter.ProcessService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ProcessController
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getAll ()
     {
         List<Process> processes = processService.getAll();
@@ -30,6 +32,7 @@ public class ProcessController
     }
 
     @GetMapping("/getByUserId/{id}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByUserId (@PathVariable Integer id)
     {
         List<Process> processes = processService.getByUserId(id);
@@ -38,6 +41,7 @@ public class ProcessController
     }
 
     @GetMapping("/getByTaskId/{id}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByTaskId (@PathVariable Integer id)
     {
         List<Process> processes = processService.getByTaskId(id);
@@ -46,6 +50,7 @@ public class ProcessController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<ResponseDTO<ProcessDTO>> getById (@PathVariable Integer id)
     {
         Process process = processService.getById(id);
@@ -58,6 +63,7 @@ public class ProcessController
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<ProcessDTO>> add (@RequestBody ProcessDTO processDTO)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
@@ -85,6 +91,7 @@ public class ProcessController
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<ProcessDTO>> update (@RequestBody ProcessDTO processDTO)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
@@ -114,6 +121,7 @@ public class ProcessController
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO<ProcessDTO>> delete (@PathVariable Integer id)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>();

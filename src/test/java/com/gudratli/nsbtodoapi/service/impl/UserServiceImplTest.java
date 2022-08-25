@@ -12,6 +12,7 @@ import com.gudratli.nsbtodoapi.repository.UserRepository;
 import com.gudratli.nsbtodoapi.service.inter.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,8 @@ class UserServiceImplTest
     private CountryRepository countryRepository;
     private RoleRepository roleRepository;
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     private UserService userService;
 
     @BeforeEach
@@ -34,8 +37,9 @@ class UserServiceImplTest
         userRepository = mock(UserRepository.class);
         countryRepository = mock(CountryRepository.class);
         roleRepository = mock(RoleRepository.class);
+        bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
 
-        userService = new UserServiceImpl(userRepository, countryRepository, roleRepository);
+        userService = new UserServiceImpl(userRepository, countryRepository, roleRepository, bCryptPasswordEncoder);
     }
 
     @Test
@@ -162,6 +166,7 @@ class UserServiceImplTest
         when(userRepository.findByPhone(user.getPhone())).thenReturn(null);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
         when(userRepository.findByUsername(user.getUsername())).thenReturn(null);
+        when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
 
         User actual = userService.add(user);
 
@@ -170,6 +175,7 @@ class UserServiceImplTest
         verify(userRepository).findByPhone(user.getPhone());
         verify(userRepository).findByEmail(user.getEmail());
         verify(userRepository).findByUsername(user.getUsername());
+        verify(bCryptPasswordEncoder).encode(user.getPassword());
     }
 
     @Test
@@ -248,6 +254,7 @@ class UserServiceImplTest
         when(userRepository.findByPhone(user.getPhone())).thenReturn(null);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
         when(userRepository.findByUsername(user.getUsername())).thenReturn(null);
+        when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
 
         User actual = userService.update(user);
 
@@ -256,6 +263,7 @@ class UserServiceImplTest
         verify(userRepository).findByPhone(user.getPhone());
         verify(userRepository).findByEmail(user.getEmail());
         verify(userRepository).findByUsername(user.getUsername());
+        verify(bCryptPasswordEncoder).encode(user.getPassword());
     }
 
     @Test

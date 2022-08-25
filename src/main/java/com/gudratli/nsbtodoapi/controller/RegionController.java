@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRegionException;
 import com.gudratli.nsbtodoapi.service.inter.RegionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/region")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class RegionController
 {
     private final RegionService regionService;

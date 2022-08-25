@@ -8,6 +8,7 @@ import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateLanguageException;
 import com.gudratli.nsbtodoapi.service.inter.LanguageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/language")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class LanguageController
 {
     private final LanguageService languageService;
