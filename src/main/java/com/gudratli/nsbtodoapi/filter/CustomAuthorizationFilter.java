@@ -23,11 +23,15 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter
 {
+    private static final Set<String> SERVLET_PATHS = Collections.unmodifiableSet(new HashSet<>(
+            Arrays.asList("/login", "/account/token/refresh", "/emailToken/getActiveByEmail/**", "/emailToken/isValid",
+                    "/emailToken/generateToken/**", "/emailToken/expire/**")));
+
     @Override
     protected void doFilterInternal (HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException
     {
-        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/account/token/refresh"))
+        if (SERVLET_PATHS.contains(request.getServletPath()))
             filterChain.doFilter(request, response);
         else
         {

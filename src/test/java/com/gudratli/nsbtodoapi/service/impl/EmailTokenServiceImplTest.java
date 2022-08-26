@@ -5,6 +5,7 @@ import com.gudratli.nsbtodoapi.repository.EmailTokenRepository;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.*;
 
@@ -15,15 +16,15 @@ import static org.mockito.Mockito.*;
 class EmailTokenServiceImplTest
 {
     private EmailTokenRepository emailTokenRepository;
-
     private EmailTokenService emailTokenService;
 
     @BeforeEach
     public void setUp ()
     {
         emailTokenRepository = mock(EmailTokenRepository.class);
+        BCryptPasswordEncoder bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
 
-        emailTokenService = new EmailTokenServiceImpl(emailTokenRepository);
+        emailTokenService = new EmailTokenServiceImpl(emailTokenRepository, bCryptPasswordEncoder);
     }
 
     @Test

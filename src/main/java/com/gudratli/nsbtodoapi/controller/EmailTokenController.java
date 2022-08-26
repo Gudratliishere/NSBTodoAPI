@@ -2,6 +2,7 @@ package com.gudratli.nsbtodoapi.controller;
 
 import com.gudratli.nsbtodoapi.dto.Converter;
 import com.gudratli.nsbtodoapi.dto.EmailTokenDTO;
+import com.gudratli.nsbtodoapi.dto.EmailTokenVerifyDTO;
 import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.EmailToken;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
@@ -57,30 +58,34 @@ public class EmailTokenController
         return ResponseEntity.ok(getResponse(emailToken, "email."));
     }
 
-    @GetMapping("/isExpired/{id}")
+    @PostMapping("/isValid")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<Boolean>> isExpired (@PathVariable Integer id)
+    public ResponseEntity<ResponseDTO<Boolean>> isValid (@RequestBody EmailTokenVerifyDTO emailTokenVerifyDTO)
     {
-        EmailToken emailToken = emailTokenService.getById(id);
+        EmailToken emailToken = emailTokenService.getById(emailTokenVerifyDTO.getId());
         ResponseDTO<Boolean> responseDTO = new ResponseDTO<>();
 
         if (emailToken == null)
             return ResponseEntity.ok(responseDTO.notFound("emailToken", "id."));
 
-        if (emailToken.getStatus() && !emailTokenService.isExpired(emailToken))
+        if (!emailToken.getToken().equals(emailTokenVerifyDTO.getToken()))
         {
             responseDTO.setObject(false);
+            responseDTO.setSuccessMessage("Token is not valid.");
+        } else if (emailToken.getStatus() && !emailTokenService.isExpired(emailToken))
+        {
+            responseDTO.setObject(true);
             responseDTO.setSuccessMessage("Token is valid.");
         } else
         {
-            responseDTO.setObject(true);
+            responseDTO.setObject(false);
             responseDTO.setSuccessMessage("Token is expired.");
         }
 
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PostMapping("/{email}")
+    @PostMapping("/generateToken/{email}")
     @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> generateToken (@PathVariable String email)
     {
@@ -92,7 +97,7 @@ public class EmailTokenController
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/expireEmailToken/{id}")
+    @PutMapping("/expire/{id}")
     @PreAuthorize("permitAll()")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> expire (@PathVariable Integer id)
     {

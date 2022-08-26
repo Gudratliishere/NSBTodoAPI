@@ -4,6 +4,7 @@ import com.gudratli.nsbtodoapi.entity.EmailToken;
 import com.gudratli.nsbtodoapi.repository.EmailTokenRepository;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import java.util.Random;
 public class EmailTokenServiceImpl implements EmailTokenService
 {
     private final EmailTokenRepository emailTokenRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<EmailToken> getAll ()
@@ -81,11 +83,11 @@ public class EmailTokenServiceImpl implements EmailTokenService
     {
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
                 + "lmnopqrstuvwxyz!@#$%&";
-        int len = 30;
+        int len = 10;
         Random rnd = new Random();
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++)
             sb.append(chars.charAt(rnd.nextInt(chars.length())));
-        return sb.toString();
+        return bCryptPasswordEncoder.encode(sb);
     }
 }
