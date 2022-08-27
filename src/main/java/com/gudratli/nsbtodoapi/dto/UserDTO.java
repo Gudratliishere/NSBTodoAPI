@@ -12,7 +12,7 @@ public class UserDTO
     private String email;
     private String github;
     private String address;
-    private String cv;
+    private int cv;
     private String username;
     private Integer countryId;
 }

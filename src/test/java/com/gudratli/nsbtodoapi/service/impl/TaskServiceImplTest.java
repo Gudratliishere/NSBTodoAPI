@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gudratli.nsbtodoapi.util.Entities.getTask;
-import static com.gudratli.nsbtodoapi.util.Entities.getTaskList;
+import static com.gudratli.nsbtodoapi.util.Entities.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
@@ -68,7 +67,7 @@ class TaskServiceImplTest
     @Test
     public void testAdd ()
     {
-        Task task = new Task("Rename project", "You will rename project", "doc", "result");
+        Task task = new Task("Rename project", "You will rename project", getFile(), getFile());
         Task expected = getTask(task.getName(), 5);
         when(taskRepository.save(task)).thenReturn(expected);
 

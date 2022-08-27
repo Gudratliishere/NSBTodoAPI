@@ -21,6 +21,7 @@ public class Converter
     private final LanguageService languageService;
     private final TechnologyService technologyService;
     private final RoleService roleService;
+    private final FileService fileService;
 
     //Country converter
     public CountryDTO toCountryDTO (Country country)
@@ -87,6 +88,18 @@ public class Converter
         modelMapper.map(emailTokenDTO, emailToken);
     }
     //EmailToken ends
+
+    //File
+    public FileDTO toFileDTO (File file)
+    {
+        return modelMapper.map(file, FileDTO.class);
+    }
+
+    public File toFile (FileDTO fileDTO)
+    {
+        return modelMapper.map(fileDTO, File.class);
+    }
+    //File ends
 
     //Language
     public LanguageDTO toLanguageDTO (Language language)
@@ -244,6 +257,7 @@ public class Converter
     {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         userDTO.setCountryId(user.getCountry().getId());
+        userDTO.setCv(user.getCv().getId());
 
         return userDTO;
     }
@@ -252,6 +266,7 @@ public class Converter
     {
         User user = modelMapper.map(userDTO, User.class);
         user.setCountry(countryService.getById(userDTO.getCountryId()));
+        user.setCv(fileService.getFileById(userDTO.getCv()));
 
         return user;
     }
@@ -260,6 +275,7 @@ public class Converter
     {
         modelMapper.map(userDTO, user);
         user.setCountry(countryService.getById(userDTO.getCountryId()));
+        user.setCv(fileService.getFileById(userDTO.getCv()));
     }
     //User ends
 

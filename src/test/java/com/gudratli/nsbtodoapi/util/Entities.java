@@ -61,6 +61,14 @@ public class Entities
     }
     //Country end
 
+    //File
+    public static File getFile ()
+    {
+        File file = new File("file", "image/jpeg", 1234);
+        file.setId(1);
+        return file;
+    }
+
     //Language
     public static Language getLanguage ()
     {
@@ -148,14 +156,14 @@ public class Entities
     //Task
     public static Task getTask ()
     {
-        Task task = new Task("Rename project", "You will rename project", "doc", "result");
+        Task task = new Task("Rename project", "You will rename project", getFile(), getFile());
         task.setId(1);
         return task;
     }
 
     public static Task getTask (String name, int id)
     {
-        Task task = new Task(name, "You will rename project", "doc", "result");
+        Task task = new Task(name, "You will rename project", getFile(), getFile());
         task.setId(id);
         return task;
     }
@@ -260,7 +268,7 @@ public class Entities
     public static User getUser (String name, Boolean status, Boolean banned, int id)
     {
         User user = new User(name, "Gudratli", "0556105884", "dunay@gmail", "git",
-                "masazir", "cv", "dunay", "123", getCountry(), getRole());
+                "masazir", "cv", "dunay", getFile(), getCountry(), getRole());
         user.setId(id);
         user.setStatus(status);
         user.setBanned(banned);
@@ -270,7 +278,7 @@ public class Entities
     public static User getUser ()
     {
         User user = new User("Turqay", "Gudratli", "0556105884", "dunay@gmail", "git",
-                "masazir", "cv", "dunay", "123", getCountry(), getRole());
+                "masazir", "cv", "dunay", getFile(), getCountry(), getRole());
         user.setStatus(true);
         user.setBanned(true);
         return user;

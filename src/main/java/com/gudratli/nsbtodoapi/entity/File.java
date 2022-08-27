@@ -8,28 +8,25 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "files")
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Task
+public class File
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "task_id")
     private Integer id;
-    @Column(name = "name")
+
+    @Column
     @NonNull
     private String name;
-    @Column(name = "description")
+
+    @Column
     @NonNull
-    private String description;
-    @JoinColumn(name = "documentation", referencedColumnName = "id")
-    @OneToOne
+    private String type;
+
+    @Column
     @NonNull
-    private File documentation;
-    @JoinColumn(name = "result", referencedColumnName = "id")
-    @OneToOne
-    @NonNull
-    private File result;
+    private double size;
 }

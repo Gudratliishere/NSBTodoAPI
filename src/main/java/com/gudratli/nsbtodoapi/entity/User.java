@@ -36,9 +36,6 @@ public class User
     @Column(name = "address")
     @NonNull
     private String address;
-    @Column(name = "cv")
-    @NonNull
-    private String cv;
     @Column(name = "username")
     @NonNull
     private String username;
@@ -49,6 +46,10 @@ public class User
     private Boolean status;
     @Column(name = "banned")
     private Boolean banned;
+    @JoinColumn(name = "cv", referencedColumnName = "id")
+    @OneToOne
+    @NonNull
+    private File cv;
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
