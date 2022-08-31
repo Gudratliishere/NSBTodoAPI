@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class UserTechnologyController
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> add (@RequestBody UserTechnologyDTO userTechnologyDTO)
+    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> add (@Valid @RequestBody UserTechnologyDTO userTechnologyDTO)
     {
         ResponseDTO<UserTechnologyDTO> responseDTO = new ResponseDTO<>();
 
@@ -89,7 +90,7 @@ public class UserTechnologyController
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> update (@RequestBody UserTechnologyDTO userTechnologyDTO)
+    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> update (@Valid @RequestBody UserTechnologyDTO userTechnologyDTO)
     {
         ResponseDTO<UserTechnologyDTO> responseDTO = new ResponseDTO<>(userTechnologyDTO);
         UserTechnology userTechnology = userTechnologyService.getById(userTechnologyDTO.getId());

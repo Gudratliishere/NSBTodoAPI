@@ -9,14 +9,18 @@ import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/emailToken")
+@Validated
 public class EmailTokenController
 {
     private final EmailTokenService emailTokenService;
@@ -60,7 +64,7 @@ public class EmailTokenController
 
     @PostMapping("/isValid")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<Boolean>> isValid (@RequestBody EmailTokenVerifyDTO emailTokenVerifyDTO)
+    public ResponseEntity<ResponseDTO<Boolean>> isValid (@Valid @RequestBody EmailTokenVerifyDTO emailTokenVerifyDTO)
     {
         EmailToken emailToken = emailTokenService.getById(emailTokenVerifyDTO.getId());
         ResponseDTO<Boolean> responseDTO = new ResponseDTO<>();
@@ -87,7 +91,8 @@ public class EmailTokenController
 
     @PostMapping("/generateToken/{email}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<EmailTokenDTO>> generateToken (@PathVariable String email)
+    public ResponseEntity<ResponseDTO<EmailTokenDTO>> generateToken (
+            @PathVariable @Email(message = "Email must be valid") String email)
     {
         EmailToken emailToken = emailTokenService.generateToken(email);
 

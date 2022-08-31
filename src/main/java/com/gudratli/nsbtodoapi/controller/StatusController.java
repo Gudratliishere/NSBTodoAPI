@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class StatusController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> add (@RequestBody StatusDTO statusDTO)
+    public ResponseEntity<ResponseDTO<StatusDTO>> add (@Valid @RequestBody StatusDTO statusDTO)
     {
         Status status = converter.toStatus(statusDTO);
         status.setId(null);
@@ -78,7 +79,7 @@ public class StatusController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> update (@RequestBody StatusDTO statusDTO)
+    public ResponseEntity<ResponseDTO<StatusDTO>> update (@Valid @RequestBody StatusDTO statusDTO)
     {
         Status status = statusService.getById(statusDTO.getId());
         ResponseDTO<StatusDTO> responseDTO = new ResponseDTO<>(statusDTO);

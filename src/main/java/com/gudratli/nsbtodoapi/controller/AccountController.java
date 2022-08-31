@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class AccountController
 
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<UserDTO>> register (@RequestBody UserCreateDTO userCreateDTO)
+    public ResponseEntity<ResponseDTO<UserDTO>> register (@Valid @RequestBody UserCreateDTO userCreateDTO)
     {
         User user = converter.toUser(userCreateDTO);
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>(converter.toUserDTO(user));
@@ -98,7 +99,7 @@ public class AccountController
 
     @PostMapping("/changePassword")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<UserDTO>> changePassword (@RequestBody UserAuthDTO userAuthDTO)
+    public ResponseEntity<ResponseDTO<UserDTO>> changePassword (@Valid @RequestBody UserAuthDTO userAuthDTO)
     {
         User user = userService.getById(userAuthDTO.getId());
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();

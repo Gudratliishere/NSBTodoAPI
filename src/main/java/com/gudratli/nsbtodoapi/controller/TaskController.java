@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class TaskController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<TaskDTO>> add (@RequestBody TaskDTO taskDTO)
+    public ResponseEntity<ResponseDTO<TaskDTO>> add (@Valid @RequestBody TaskDTO taskDTO)
     {
         Task task = converter.toTask(taskDTO);
         task.setId(null);
@@ -218,7 +219,7 @@ public class TaskController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<TaskDTO>> update (@RequestBody TaskDTO taskDTO)
+    public ResponseEntity<ResponseDTO<TaskDTO>> update (@Valid @RequestBody TaskDTO taskDTO)
     {
         Task task = taskService.getById(taskDTO.getId());
         ResponseDTO<TaskDTO> responseDTO = new ResponseDTO<>();

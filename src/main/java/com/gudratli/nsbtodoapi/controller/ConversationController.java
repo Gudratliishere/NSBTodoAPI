@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class ConversationController
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<ConversationDTO>> add (@RequestBody ConversationDTO conversationDTO)
+    public ResponseEntity<ResponseDTO<ConversationDTO>> add (@Valid @RequestBody ConversationDTO conversationDTO)
     {
         ResponseDTO<ConversationDTO> responseDTO = new ResponseDTO<>(conversationDTO);
         Conversation conversation = converter.toConversation(conversationDTO);
@@ -80,7 +81,7 @@ public class ConversationController
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<ConversationDTO>> update (@RequestBody ConversationDTO conversationDTO)
+    public ResponseEntity<ResponseDTO<ConversationDTO>> update (@Valid @RequestBody ConversationDTO conversationDTO)
     {
         ResponseDTO<ConversationDTO> responseDTO = new ResponseDTO<>();
         Conversation conversation = conversationService.getById(conversationDTO.getId());

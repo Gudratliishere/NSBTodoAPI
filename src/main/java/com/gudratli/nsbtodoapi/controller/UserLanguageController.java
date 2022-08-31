@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class UserLanguageController
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<UserLanguageDTO>> add (@RequestBody UserLanguageDTO userLanguageDTO)
+    public ResponseEntity<ResponseDTO<UserLanguageDTO>> add (@Valid @RequestBody UserLanguageDTO userLanguageDTO)
     {
         ResponseDTO<UserLanguageDTO> responseDTO = new ResponseDTO<>();
 
@@ -90,7 +91,7 @@ public class UserLanguageController
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<UserLanguageDTO>> update (@RequestBody UserLanguageDTO userLanguageDTO)
+    public ResponseEntity<ResponseDTO<UserLanguageDTO>> update (@Valid @RequestBody UserLanguageDTO userLanguageDTO)
     {
 
         UserLanguage userLanguage = userLanguageService.getById(userLanguageDTO.getId());

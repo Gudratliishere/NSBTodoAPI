@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class RoleController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> add (@RequestBody RoleDTO roleDTO)
+    public ResponseEntity<ResponseDTO<RoleDTO>> add (@Valid @RequestBody RoleDTO roleDTO)
     {
         Role role = converter.toRole(roleDTO);
         role.setId(null);
@@ -78,7 +79,7 @@ public class RoleController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> update (@RequestBody RoleDTO roleDTO)
+    public ResponseEntity<ResponseDTO<RoleDTO>> update (@Valid @RequestBody RoleDTO roleDTO)
     {
         Role role = roleService.getById(roleDTO.getId());
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>(roleDTO);

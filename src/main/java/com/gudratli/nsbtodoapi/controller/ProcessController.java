@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class ProcessController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<ProcessDTO>> add (@RequestBody ProcessDTO processDTO)
+    public ResponseEntity<ResponseDTO<ProcessDTO>> add (@Valid @RequestBody ProcessDTO processDTO)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
 
@@ -92,7 +93,7 @@ public class ProcessController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<ProcessDTO>> update (@RequestBody ProcessDTO processDTO)
+    public ResponseEntity<ResponseDTO<ProcessDTO>> update (@Valid @RequestBody ProcessDTO processDTO)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
 

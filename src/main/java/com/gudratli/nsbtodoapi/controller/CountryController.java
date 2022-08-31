@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class CountryController
     }
 
     @PostMapping()
-    public ResponseEntity<ResponseDTO<CountryDTO>> add (@RequestBody CountryDTO countryDTO)
+    public ResponseEntity<ResponseDTO<CountryDTO>> add (@Valid @RequestBody CountryDTO countryDTO)
     {
         Country country = converter.toCountry(countryDTO);
         country.setId(null);
@@ -84,7 +85,7 @@ public class CountryController
     }
 
     @PutMapping()
-    public ResponseEntity<ResponseDTO<CountryDTO>> update (@RequestBody CountryDTO countryDTO)
+    public ResponseEntity<ResponseDTO<CountryDTO>> update (@Valid @RequestBody CountryDTO countryDTO)
     {
         Country country = countryService.getById(countryDTO.getId());
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();

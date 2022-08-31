@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -118,7 +119,7 @@ public class UserController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<UserDTO>> update (@RequestBody UserDTO userDTO)
+    public ResponseEntity<ResponseDTO<UserDTO>> update (@Valid @RequestBody UserDTO userDTO)
     {
         User user = userService.getById(userDTO.getId());
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>(userDTO);

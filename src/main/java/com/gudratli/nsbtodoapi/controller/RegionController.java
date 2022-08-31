@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class RegionController
     }
 
     @PostMapping()
-    public ResponseEntity<ResponseDTO<RegionDTO>> add (@RequestBody RegionDTO regionDTO)
+    public ResponseEntity<ResponseDTO<RegionDTO>> add (@Valid @RequestBody RegionDTO regionDTO)
     {
         Region region = converter.toRegion(regionDTO);
         region.setId(null);
@@ -75,7 +77,7 @@ public class RegionController
     }
 
     @PutMapping()
-    public ResponseEntity<ResponseDTO<RegionDTO>> update (@RequestBody RegionDTO regionDTO)
+    public ResponseEntity<ResponseDTO<RegionDTO>> update (@Valid @RequestBody RegionDTO regionDTO)
     {
         Region region = regionService.getById(regionDTO.getId());
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>(regionDTO);
