@@ -6,6 +6,7 @@ import com.gudratli.nsbtodoapi.dto.EmailTokenVerifyDTO;
 import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.EmailToken;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,6 +56,7 @@ public class EmailTokenController
 
     @GetMapping("/getActiveByEmail/{email}")
     @PreAuthorize("permitAll()")
+    @ApiOperation(value = "files", notes = "upload user emails from CSV and email content from json and send out")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> getActiveByEmail (@PathVariable String email)
     {
         EmailToken emailToken = emailTokenService.getActiveByEmail(email);

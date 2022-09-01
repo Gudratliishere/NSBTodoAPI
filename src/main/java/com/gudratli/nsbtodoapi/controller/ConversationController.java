@@ -5,6 +5,9 @@ import com.gudratli.nsbtodoapi.dto.Converter;
 import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.Conversation;
 import com.gudratli.nsbtodoapi.service.inter.ConversationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,12 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/conversation")
 @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+@Api(value = "Conversation controller")
 public class ConversationController
 {
     private final ConversationService conversationService;
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @ApiOperation(value = "Get All", notes = "Returns all the conversations.")
     public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getAll ()
     {
         List<Conversation> conversations = conversationService.getAll();
@@ -32,7 +37,9 @@ public class ConversationController
     }
 
     @GetMapping("/getByUserId/{id}")
-    public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getByUserId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by user ID", notes = "Get all conversations of certain user.")
+    public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getByUserId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user.", required = true, example = "12") Integer id)
     {
         List<Conversation> conversations = conversationService.getByUserId(id);
 
@@ -40,7 +47,9 @@ public class ConversationController
     }
 
     @GetMapping("/getByProcessId/{id}")
-    public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getByProcessId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by process ID", notes = "Get all conversations under certain process.")
+    public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getByProcessId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of process.", required = true, example = "15") Integer id)
     {
         List<Conversation> conversations = conversationService.getByProcessId(id);
 
@@ -48,8 +57,13 @@ public class ConversationController
     }
 
     @GetMapping("/getByUserIdAndProcessId/{userId}/{processId}")
-    public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getByUserIdAndProcessId (@PathVariable Integer userId,
-            @PathVariable Integer processId)
+    @ApiOperation(value = "Get by user ID and process ID",
+            notes = "Get all conversation under certain process written by certain user")
+    public ResponseEntity<ResponseDTO<List<ConversationDTO>>> getByUserIdAndProcessId (
+            @PathVariable
+            @ApiParam(name = "User ID", value = "ID of user", required = true, example = "15") Integer userId,
+            @PathVariable
+            @ApiParam(name = "Process ID", value = "ID of process", required = true, example = "12") Integer processId)
     {
         List<Conversation> conversations = conversationService.getByUserIdAndProcessId(userId, processId);
 
@@ -57,7 +71,9 @@ public class ConversationController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
-    public ResponseEntity<ResponseDTO<ConversationDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Get single conversation with ID.")
+    public ResponseEntity<ResponseDTO<ConversationDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of conversation", required = true, example = "19") Integer id)
     {
         Conversation conversation = conversationService.getById(id);
         ResponseDTO<ConversationDTO> responseDTO = new ResponseDTO<>();
@@ -69,7 +85,9 @@ public class ConversationController
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<ConversationDTO>> add (@Valid @RequestBody ConversationDTO conversationDTO)
+    @ApiOperation(value = "Add", notes = "Add new conversation.")
+    public ResponseEntity<ResponseDTO<ConversationDTO>> add (@Valid @RequestBody @ApiParam(name = "Conversation",
+            value = "Conversation DTO", required = true) ConversationDTO conversationDTO)
     {
         ResponseDTO<ConversationDTO> responseDTO = new ResponseDTO<>(conversationDTO);
         Conversation conversation = converter.toConversation(conversationDTO);
@@ -81,7 +99,9 @@ public class ConversationController
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<ConversationDTO>> update (@Valid @RequestBody ConversationDTO conversationDTO)
+    @ApiOperation(value = "Update", notes = "Update certain conversation.")
+    public ResponseEntity<ResponseDTO<ConversationDTO>> update (@Valid @RequestBody @ApiParam(name = "Conversation",
+            value = "Conversation DTO", required = true) ConversationDTO conversationDTO)
     {
         ResponseDTO<ConversationDTO> responseDTO = new ResponseDTO<>();
         Conversation conversation = conversationService.getById(conversationDTO.getId());
@@ -97,7 +117,9 @@ public class ConversationController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<ConversationDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete conversation with that id.")
+    public ResponseEntity<ResponseDTO<ConversationDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of conversation", required = true, example = "15") Integer id)
     {
         ResponseDTO<ConversationDTO> responseDTO = new ResponseDTO<>();
         Conversation conversation = conversationService.getById(id);

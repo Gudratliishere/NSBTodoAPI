@@ -1,23 +1,33 @@
 package com.gudratli.nsbtodoapi.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-
-import java.lang.reflect.ParameterizedType;
 
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
+@ApiModel(value = "Response", description = "Response DTO which used when data retrieve from api.")
 public class ResponseDTO<T>
 {
+    @ApiModelProperty("Code of error if there is any error when returning data in API.")
     private Integer errorCode;
+
+    @ApiModelProperty("Message about error if there is any error when returning data in API.")
     private String errorMessage;
+
+    @ApiModelProperty("Message about success if data returned successfully.")
     private String successMessage;
+
     @NonNull
+    @ApiModelProperty("Object that returned from API.")
     private T object;
 
-    /** Model is the name of entity */
+    /**
+     * Model is the name of entity
+     */
     public ResponseDTO<T> notFound (String model, String parameter)
     {
         errorCode = 404;

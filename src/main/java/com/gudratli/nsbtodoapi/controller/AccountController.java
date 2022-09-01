@@ -11,6 +11,9 @@ import com.gudratli.nsbtodoapi.entity.User;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateException;
 import com.gudratli.nsbtodoapi.service.inter.RoleService;
 import com.gudratli.nsbtodoapi.service.inter.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/account")
+@Api("Account controller")
 public class AccountController
 {
     private final UserService userService;
@@ -38,6 +42,7 @@ public class AccountController
 
     @GetMapping("/token/refresh")
     @PreAuthorize("permitAll()")
+    @ApiOperation(value = "Refresh token", notes = "Send refresh token to get new token")
     public void refreshToken (HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -80,7 +85,9 @@ public class AccountController
 
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<UserDTO>> register (@Valid @RequestBody UserCreateDTO userCreateDTO)
+    @ApiOperation(value = "Register", notes = "Send user information to register account.")
+    public ResponseEntity<ResponseDTO<UserDTO>> register (@Valid @RequestBody @ApiParam(name = "User Create DTO",
+            value = "Send this DTO to add new account.", required = true) UserCreateDTO userCreateDTO)
     {
         User user = converter.toUser(userCreateDTO);
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>(converter.toUserDTO(user));
@@ -99,7 +106,9 @@ public class AccountController
 
     @PostMapping("/changePassword")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<UserDTO>> changePassword (@Valid @RequestBody UserAuthDTO userAuthDTO)
+    @ApiOperation(value = "Change password", notes = "Send UserAuthDTO to change password.")
+    public ResponseEntity<ResponseDTO<UserDTO>> changePassword (@Valid @RequestBody @ApiParam(name = "User Auth DTO",
+            value = "Send this DTO to change password.", required = true) UserAuthDTO userAuthDTO)
     {
         User user = userService.getById(userAuthDTO.getId());
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
@@ -114,7 +123,9 @@ public class AccountController
 
     @GetMapping("/activate/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<UserDTO>> activateUser (@PathVariable Integer id)
+    @ApiOperation(value = "Activate user", notes = "Activate user status, so user can login to account.")
+    public ResponseEntity<ResponseDTO<UserDTO>> activateUser (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user whom being activated.", required = true, example = "16") Integer id)
     {
         User user = userService.getById(id);
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
@@ -129,7 +140,9 @@ public class AccountController
 
     @GetMapping("/deactivate/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<UserDTO>> deactivateUser (@PathVariable Integer id)
+    @ApiOperation(value = "Deactivate user", notes = "Deactivate user status, so user can not login and use account.")
+    public ResponseEntity<ResponseDTO<UserDTO>> deactivateUser (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user whom being deactivated.", required = true, example = "12") Integer id)
     {
         User user = userService.getById(id);
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
@@ -144,7 +157,9 @@ public class AccountController
 
     @GetMapping("/ban/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<UserDTO>> banUser (@PathVariable Integer id)
+    @ApiOperation(value = "Ban user", notes = "Ban user, so user can not use account.")
+    public ResponseEntity<ResponseDTO<UserDTO>> banUser (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user whom being banned.", required = true, example = "18") Integer id)
     {
         User user = userService.getById(id);
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
@@ -159,7 +174,9 @@ public class AccountController
 
     @GetMapping("/removeBan/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<UserDTO>> removeBanUser (@PathVariable Integer id)
+    @ApiOperation(value = "Remove ban", notes = "Remove ban from user, so user can user account again.")
+    public ResponseEntity<ResponseDTO<UserDTO>> removeBanUser (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user whom removing ban from.", required = true, example = "19") Integer id)
     {
         User user = userService.getById(id);
         ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
@@ -174,7 +191,10 @@ public class AccountController
 
     @GetMapping("/changeRole/{id}/{roleId}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<UserDTO>> removeBanUser (@PathVariable Integer id, @PathVariable Integer roleId)
+    @ApiOperation(value = "Change role", notes = "Change role of user.")
+    public ResponseEntity<ResponseDTO<UserDTO>> changeRole (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user whom role will be changed.", required = true, example = "15") Integer id, @PathVariable
+    @ApiParam(name = "Role ID", value = "ID of role that will assign to user.", required = true, example = "2") Integer roleId)
     {
         User user = userService.getById(id);
         Role role = roleService.getById(roleId);

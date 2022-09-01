@@ -35,8 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeHttpRequests().antMatchers("/account/token/refresh", "/emailToken/getActiveByEmail/**",
-                "/emailToken/isValid", "/emailToken/generateToken/**", "/emailToken/expire/**").permitAll();
+        http.authorizeHttpRequests().antMatchers(
+                "/account/token/refresh",
+                "/emailToken/getActiveByEmail/**",
+                "/emailToken/isValid",
+                "/emailToken/generateToken/**",
+                "/emailToken/expire/**",
+                "/v2/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-resources/**").permitAll();
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

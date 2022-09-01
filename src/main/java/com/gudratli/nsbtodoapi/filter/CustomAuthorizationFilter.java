@@ -24,8 +24,16 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class CustomAuthorizationFilter extends OncePerRequestFilter
 {
     private static final Set<String> SERVLET_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/login", "/account/token/refresh", "/emailToken/getActiveByEmail/**", "/emailToken/isValid",
-                    "/emailToken/generateToken/**", "/emailToken/expire/**")));
+            Arrays.asList(
+                    "/login",
+                    "/account/token/refresh",
+                    "/emailToken/getActiveByEmail/**",
+                    "/emailToken/isValid",
+                    "/emailToken/generateToken/**",
+                    "/emailToken/expire/**",
+                    "/v2/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-resources/**")));
 
     @Override
     protected void doFilterInternal (HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
