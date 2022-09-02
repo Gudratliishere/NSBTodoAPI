@@ -6,6 +6,9 @@ import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.Process;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateProcessException;
 import com.gudratli.nsbtodoapi.service.inter.ProcessService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/process")
+@Api("Process controller")
 public class ProcessController
 {
     private final ProcessService processService;
@@ -25,6 +29,7 @@ public class ProcessController
 
     @GetMapping(value = {"/getAll", ""})
     @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @ApiOperation(value = "Get All", notes = "Returns all processes.")
     public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getAll ()
     {
         List<Process> processes = processService.getAll();
@@ -34,7 +39,9 @@ public class ProcessController
 
     @GetMapping("/getByUserId/{id}")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByUserId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by user ID", notes = "Returns all processes of that user.")
+    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByUserId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the user.", required = true, example = "12") Integer id)
     {
         List<Process> processes = processService.getByUserId(id);
 
@@ -43,7 +50,9 @@ public class ProcessController
 
     @GetMapping("/getByTaskId/{id}")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByTaskId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by task ID", notes = "Returns all processes of that task.")
+    public ResponseEntity<ResponseDTO<List<ProcessDTO>>> getByTaskId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task.", required = true, example = "10") Integer id)
     {
         List<Process> processes = processService.getByTaskId(id);
 
@@ -52,7 +61,9 @@ public class ProcessController
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<ProcessDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single process according to ID.")
+    public ResponseEntity<ResponseDTO<ProcessDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the process.", required = true, example = "15") Integer id)
     {
         Process process = processService.getById(id);
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>();
@@ -65,7 +76,9 @@ public class ProcessController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<ProcessDTO>> add (@Valid @RequestBody ProcessDTO processDTO)
+    @ApiOperation(value = "Add", notes = "Add new process.")
+    public ResponseEntity<ResponseDTO<ProcessDTO>> add (@Valid @RequestBody @ApiParam(name = "Process",
+            value = "DTO for process", required = true) ProcessDTO processDTO)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
 
@@ -93,7 +106,9 @@ public class ProcessController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<ProcessDTO>> update (@Valid @RequestBody ProcessDTO processDTO)
+    @ApiOperation(value = "Update", notes = "Update existing process.")
+    public ResponseEntity<ResponseDTO<ProcessDTO>> update (@Valid @RequestBody @ApiParam(name = "Process",
+            value = "DTO for process.", required = true) ProcessDTO processDTO)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>(processDTO);
 
@@ -123,7 +138,9 @@ public class ProcessController
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<ProcessDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete single process according to it's ID.")
+    public ResponseEntity<ResponseDTO<ProcessDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the process", required = true, example = "12") Integer id)
     {
         ResponseDTO<ProcessDTO> responseDTO = new ResponseDTO<>();
         Process process = processService.getById(id);

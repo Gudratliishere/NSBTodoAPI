@@ -9,6 +9,9 @@ import com.gudratli.nsbtodoapi.entity.Task;
 import com.gudratli.nsbtodoapi.service.inter.FileService;
 import com.gudratli.nsbtodoapi.service.inter.TaskService;
 import com.gudratli.nsbtodoapi.util.FileUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -29,6 +32,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/task")
+@Api("Task controller")
 public class TaskController
 {
     private final TaskService taskService;
@@ -37,6 +41,7 @@ public class TaskController
 
     @GetMapping(value = {"/getAll", ""})
     @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @ApiOperation(value = "Get All", notes = "Get all tasks.")
     public ResponseEntity<ResponseDTO<List<TaskDTO>>> getAll ()
     {
         List<Task> tasks = taskService.getAll();
@@ -46,7 +51,9 @@ public class TaskController
 
     @GetMapping("/getByNameContaining/{name}")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<List<TaskDTO>>> getByNameContaining (@PathVariable String name)
+    @ApiOperation(value = "Get by name containing", notes = "Get list of tasks that contains that key.")
+    public ResponseEntity<ResponseDTO<List<TaskDTO>>> getByNameContaining (@PathVariable @ApiParam(name = "Name",
+            value = "Name of the task", required = true, example = "If else") String name)
     {
         List<Task> tasks = taskService.getByNameContaining(name);
 
@@ -55,7 +62,9 @@ public class TaskController
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<TaskDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Get single task according to ID.")
+    public ResponseEntity<ResponseDTO<TaskDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task", required = true, example = "21") Integer id)
     {
         Task task = taskService.getById(id);
         ResponseDTO<TaskDTO> responseDTO = new ResponseDTO<>();
@@ -70,7 +79,9 @@ public class TaskController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<TaskDTO>> add (@Valid @RequestBody TaskDTO taskDTO)
+    @ApiOperation(value = "Add", notes = "Add new task.")
+    public ResponseEntity<ResponseDTO<TaskDTO>> add (@Valid @RequestBody @ApiParam(name = "Task",
+            value = "DTO for task", required = true) TaskDTO taskDTO)
     {
         Task task = converter.toTask(taskDTO);
         task.setId(null);
@@ -85,8 +96,11 @@ public class TaskController
 
     @PostMapping("/uploadDocument/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<FileDTO>> uploadDocument (@PathVariable Integer id,
-            @RequestParam("document") MultipartFile multipartFile)
+    @ApiOperation(value = "Upload document", notes = "Upload document about task.")
+    public ResponseEntity<ResponseDTO<FileDTO>> uploadDocument (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task.", required = true, example = "22") Integer id,
+            @RequestParam("document") @ApiParam(name = "Document", value = "Document of task", required = true)
+                    MultipartFile multipartFile)
     {
         Task task = taskService.getById(id);
         ResponseDTO<FileDTO> responseDTO = new ResponseDTO<>();
@@ -124,8 +138,11 @@ public class TaskController
 
     @PostMapping("/uploadResult/{id}")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<FileDTO>> uploadResult (@PathVariable Integer id,
-            @RequestParam("result") MultipartFile multipartFile)
+    @ApiOperation(value = "Upload result", notes = "Upload result of task.")
+    public ResponseEntity<ResponseDTO<FileDTO>> uploadResult (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task.", required = true, example = "22") Integer id,
+            @RequestParam("result") @ApiParam(name = "Result", value = "Result of task", required = true)
+                    MultipartFile multipartFile)
     {
         Task task = taskService.getById(id);
         ResponseDTO<FileDTO> responseDTO = new ResponseDTO<>();
@@ -163,7 +180,9 @@ public class TaskController
 
     @GetMapping("/downloadDocument/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<Resource> downloadDocument (@PathVariable Integer id)
+    @ApiOperation(value = "Download document", notes = "Download document about task.")
+    public ResponseEntity<Resource> downloadDocument (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task", required = true, example = "26") Integer id)
     {
         Task task = taskService.getById(id);
         if (task == null)
@@ -191,7 +210,9 @@ public class TaskController
 
     @GetMapping("/downloadResult/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<Resource> downloadResult (@PathVariable Integer id)
+    @ApiOperation(value = "Download result", notes = "Download result of task.")
+    public ResponseEntity<Resource> downloadResult (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task", required = true, example = "28") Integer id)
     {
         Task task = taskService.getById(id);
         if (task == null)
@@ -219,7 +240,9 @@ public class TaskController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<TaskDTO>> update (@Valid @RequestBody TaskDTO taskDTO)
+    @ApiOperation(value = "Update", notes = "Update existing task.")
+    public ResponseEntity<ResponseDTO<TaskDTO>> update (@Valid @RequestBody @ApiParam(name = "Task",
+            value = "DTO for task", required = true) TaskDTO taskDTO)
     {
         Task task = taskService.getById(taskDTO.getId());
         ResponseDTO<TaskDTO> responseDTO = new ResponseDTO<>();
@@ -238,7 +261,9 @@ public class TaskController
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<TaskDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete single task with it's ID.")
+    public ResponseEntity<ResponseDTO<TaskDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the task", required = true, example = "26") Integer id)
     {
         Task task = taskService.getById(id);
         ResponseDTO<TaskDTO> responseDTO = new ResponseDTO<>();

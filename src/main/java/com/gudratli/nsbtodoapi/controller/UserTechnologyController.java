@@ -6,6 +6,9 @@ import com.gudratli.nsbtodoapi.dto.UserTechnologyDTO;
 import com.gudratli.nsbtodoapi.entity.UserTechnology;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateUserTechnologyException;
 import com.gudratli.nsbtodoapi.service.inter.UserTechnologyService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +22,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/userTechnology")
 @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+@Api("User technology controller")
 public class UserTechnologyController
 {
     private final UserTechnologyService userTechnologyService;
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @ApiOperation(value = "Get All", notes = "Returns all user technologies.")
     public ResponseEntity<ResponseDTO<List<UserTechnologyDTO>>> getAll ()
     {
         List<UserTechnology> userTechnologies = userTechnologyService.getAll();
@@ -33,7 +38,9 @@ public class UserTechnologyController
     }
 
     @GetMapping("/getByUserId/{id}")
-    public ResponseEntity<ResponseDTO<List<UserTechnologyDTO>>> getByUserId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by user ID", notes = "Returns all technologies that user knows.")
+    public ResponseEntity<ResponseDTO<List<UserTechnologyDTO>>> getByUserId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user", required = true, example = "26") Integer id)
     {
         List<UserTechnology> userTechnologies = userTechnologyService.getByUserId(id);
 
@@ -41,7 +48,9 @@ public class UserTechnologyController
     }
 
     @GetMapping("/getByTechnologyId/{id}")
-    public ResponseEntity<ResponseDTO<List<UserTechnologyDTO>>> getByTechnologyId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by technology ID.", notes = "Returns all users who know that technology/")
+    public ResponseEntity<ResponseDTO<List<UserTechnologyDTO>>> getByTechnologyId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of technology", required = true, example = "21") Integer id)
     {
         List<UserTechnology> userTechnologies = userTechnologyService.getByTechnologyId(id);
 
@@ -49,7 +58,9 @@ public class UserTechnologyController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
-    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by user ID", notes = "Get single user technology with it's ID.")
+    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user technology", required = true, example = "16") Integer id)
     {
         UserTechnology userTechnology = userTechnologyService.getById(id);
         ResponseDTO<UserTechnologyDTO> responseDTO = new ResponseDTO<>();
@@ -61,7 +72,9 @@ public class UserTechnologyController
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> add (@Valid @RequestBody UserTechnologyDTO userTechnologyDTO)
+    @ApiOperation(value = "Add", notes = "Add new user technology")
+    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> add (@Valid @RequestBody @ApiParam(name = "User technology",
+            value = "DTO for user technology", required = true) UserTechnologyDTO userTechnologyDTO)
     {
         ResponseDTO<UserTechnologyDTO> responseDTO = new ResponseDTO<>();
 
@@ -90,7 +103,10 @@ public class UserTechnologyController
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> update (@Valid @RequestBody UserTechnologyDTO userTechnologyDTO)
+    @ApiOperation(value = "Update", notes = "Update existing user technology")
+    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> update (
+            @Valid @RequestBody @ApiParam(name = "User technology",
+                    value = "DTO for user technology", required = true) UserTechnologyDTO userTechnologyDTO)
     {
         ResponseDTO<UserTechnologyDTO> responseDTO = new ResponseDTO<>(userTechnologyDTO);
         UserTechnology userTechnology = userTechnologyService.getById(userTechnologyDTO.getId());
@@ -121,7 +137,9 @@ public class UserTechnologyController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete single user technology according to it's ID.")
+    public ResponseEntity<ResponseDTO<UserTechnologyDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of user technology", required = true, example = "45") Integer id)
     {
         UserTechnology userTechnology = userTechnologyService.getById(id);
         ResponseDTO<UserTechnologyDTO> responseDTO = new ResponseDTO<>();

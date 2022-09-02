@@ -19,6 +19,6 @@ public class CountryDTO
     private String name;
 
     @NotNull(message = "Country must have region id.")
-    @ApiModelProperty(value = "Id of region which country is in.", example = "Africa", required = true)
+    @ApiModelProperty(value = "Id of region which country is in.", example = "3", required = true)
     private Integer regionId;
 }

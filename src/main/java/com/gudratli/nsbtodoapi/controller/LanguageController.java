@@ -6,6 +6,9 @@ import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.Language;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateLanguageException;
 import com.gudratli.nsbtodoapi.service.inter.LanguageService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +22,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/language")
 @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+@Api("Language controller")
 public class LanguageController
 {
     private final LanguageService languageService;
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @ApiOperation(value = "Get All", notes = "Returns all languages.")
     public ResponseEntity<ResponseDTO<List<LanguageDTO>>> getAll ()
     {
         List<Language> languages = languageService.getAll();
@@ -33,7 +38,9 @@ public class LanguageController
     }
 
     @GetMapping("/getByNameContaining/{name}")
-    public ResponseEntity<ResponseDTO<List<LanguageDTO>>> getByNameContaining (@PathVariable String name)
+    @ApiOperation(value = "Get by name containing", notes = "Returns list of languages that contains that key.")
+    public ResponseEntity<ResponseDTO<List<LanguageDTO>>> getByNameContaining (@PathVariable @ApiParam(name = "name",
+            value = "Name that you think languages contain.", required = true, example = "Eng") String name)
     {
         List<Language> languages = languageService.getByNameContaining(name);
 
@@ -41,7 +48,9 @@ public class LanguageController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
-    public ResponseEntity<ResponseDTO<LanguageDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single language according to ID.")
+    public ResponseEntity<ResponseDTO<LanguageDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of language", required = true, example = "15") Integer id)
     {
         Language language = languageService.getById(id);
 
@@ -49,7 +58,9 @@ public class LanguageController
     }
 
     @GetMapping("/getByName/{name}")
-    public ResponseEntity<ResponseDTO<LanguageDTO>> getByName (@PathVariable String name)
+    @ApiOperation(value = "Get by name", notes = "Returns single Language according to name, because name is unique.")
+    public ResponseEntity<ResponseDTO<LanguageDTO>> getByName (@PathVariable @ApiParam(name = "name",
+            value = "Name of language.", required = true, example = "English") String name)
     {
         Language language = languageService.getByName(name);
 
@@ -57,7 +68,9 @@ public class LanguageController
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<LanguageDTO>> add (@Valid @RequestBody LanguageDTO languageDTO)
+    @ApiOperation(value = "Add", notes = "Add new language.")
+    public ResponseEntity<ResponseDTO<LanguageDTO>> add (@Valid @RequestBody @ApiParam(name = "Language",
+            value = "DTO that contains language name.", required = true) LanguageDTO languageDTO)
     {
         Language language = converter.toLanguage(languageDTO);
         language.setId(null);
@@ -77,7 +90,9 @@ public class LanguageController
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDTO<LanguageDTO>> update (@Valid @RequestBody LanguageDTO languageDTO)
+    @ApiOperation(value = "Update", notes = "Update existing language with it's ID")
+    public ResponseEntity<ResponseDTO<LanguageDTO>> update (@Valid @RequestBody @ApiParam(name = "Language",
+            value = "DTO that contains language name and ID", required = true) LanguageDTO languageDTO)
     {
         Language language = languageService.getById(languageDTO.getId());
         ResponseDTO<LanguageDTO> responseDTO = new ResponseDTO<>();
@@ -100,7 +115,9 @@ public class LanguageController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<LanguageDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Deletes language according to ID.")
+    public ResponseEntity<ResponseDTO<LanguageDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of language", required = true, example = "19") Integer id)
     {
         Language language = languageService.getById(id);
         ResponseDTO<LanguageDTO> responseDTO = new ResponseDTO<>();

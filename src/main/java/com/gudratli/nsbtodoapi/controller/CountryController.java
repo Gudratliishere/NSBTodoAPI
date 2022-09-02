@@ -6,6 +6,9 @@ import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.Country;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateCountryException;
 import com.gudratli.nsbtodoapi.service.inter.CountryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +22,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/country")
 @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+@Api("Country controller")
 public class CountryController
 {
     private final CountryService countryService;
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @ApiOperation(value = "Get All", notes = "Returns all countries.")
     public ResponseEntity<ResponseDTO<List<CountryDTO>>> getAll ()
     {
         List<Country> countries = countryService.getAll();
@@ -33,7 +38,9 @@ public class CountryController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
-    public ResponseEntity<ResponseDTO<CountryDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single Country according to ID.")
+    public ResponseEntity<ResponseDTO<CountryDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of country", required = true, example = "16") Integer id)
     {
         Country country = countryService.getById(id);
 
@@ -41,7 +48,9 @@ public class CountryController
     }
 
     @GetMapping("/getByName/{name}")
-    public ResponseEntity<ResponseDTO<CountryDTO>> getByName (@PathVariable String name)
+    @ApiOperation(value = "Get by name", notes = "Returns single Country according to name, because name is unique.")
+    public ResponseEntity<ResponseDTO<CountryDTO>> getByName (@PathVariable @ApiParam(name = "name",
+            value = "Name of the country", required = true, example = "Turkey") String name)
     {
         Country country = countryService.getByName(name);
 
@@ -49,7 +58,9 @@ public class CountryController
     }
 
     @GetMapping("/getByNameContaining/{name}")
-    public ResponseEntity<ResponseDTO<List<CountryDTO>>> getByNameContaining (@PathVariable String name)
+    @ApiOperation(value = "Get by name containing", notes = "Returns list of country that contains this key.")
+    public ResponseEntity<ResponseDTO<List<CountryDTO>>> getByNameContaining (@PathVariable @ApiParam(name = "name",
+            value = "Name that contains countries' name.", required = true, example = "Turk") String name)
     {
         List<Country> countries = countryService.getByNameContaining(name);
 
@@ -57,15 +68,19 @@ public class CountryController
     }
 
     @GetMapping("/getByRegionId/{id}")
-    public ResponseEntity<ResponseDTO<List<CountryDTO>>> getByRegionId (@PathVariable Integer id)
+    @ApiOperation(value = "Get by region ID", notes = "Returns list of country that places certain region.")
+    public ResponseEntity<ResponseDTO<List<CountryDTO>>> getByRegionId (@PathVariable @ApiParam(name = "ID",
+            value = "ID of region", required = true, example = "22") Integer id)
     {
         List<Country> countries = countryService.getByRegionId(id);
 
         return ResponseEntity.ok(getResponseArray(countries));
     }
 
-    @PostMapping()
-    public ResponseEntity<ResponseDTO<CountryDTO>> add (@Valid @RequestBody CountryDTO countryDTO)
+    @PostMapping
+    @ApiOperation(value = "Add", notes = "Add new country.")
+    public ResponseEntity<ResponseDTO<CountryDTO>> add (@Valid @RequestBody @ApiParam(name = "Country",
+            value = "DTO for country objects.", required = true) CountryDTO countryDTO)
     {
         Country country = converter.toCountry(countryDTO);
         country.setId(null);
@@ -84,8 +99,10 @@ public class CountryController
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping()
-    public ResponseEntity<ResponseDTO<CountryDTO>> update (@Valid @RequestBody CountryDTO countryDTO)
+    @PutMapping
+    @ApiOperation(value = "Update", notes = "Update exist country with it's ID.")
+    public ResponseEntity<ResponseDTO<CountryDTO>> update (@Valid @RequestBody @ApiParam(name = "Country",
+            value = "DTO for storing country.", required = true) CountryDTO countryDTO)
     {
         Country country = countryService.getById(countryDTO.getId());
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();
@@ -108,7 +125,9 @@ public class CountryController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<CountryDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete country with it's ID.")
+    public ResponseEntity<ResponseDTO<CountryDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of country", required = true, example = "12") Integer id)
     {
         Country country = countryService.getById(id);
         ResponseDTO<CountryDTO> responseDTO = new ResponseDTO<>();

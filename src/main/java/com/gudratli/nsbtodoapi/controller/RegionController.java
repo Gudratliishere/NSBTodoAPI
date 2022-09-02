@@ -6,13 +6,15 @@ import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.Region;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRegionException;
 import com.gudratli.nsbtodoapi.service.inter.RegionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +22,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/region")
 @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+@Api("Region controller")
 public class RegionController
 {
     private final RegionService regionService;
     private final Converter converter;
 
     @GetMapping(value = {"/getAll", ""})
+    @ApiOperation(value = "Get All", notes = "Returns all regions.")
     public ResponseEntity<ResponseDTO<List<RegionDTO>>> getAll ()
     {
         List<Region> regions = regionService.getAll();
@@ -34,7 +38,9 @@ public class RegionController
     }
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
-    public ResponseEntity<ResponseDTO<RegionDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single region according to it's ID.")
+    public ResponseEntity<ResponseDTO<RegionDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the region.", required = true, example = "12") Integer id)
     {
         System.out.println(org.hibernate.Version.getVersionString());
         Region region = regionService.getById(id);
@@ -43,7 +49,9 @@ public class RegionController
     }
 
     @GetMapping("/getByName/{name}")
-    public ResponseEntity<ResponseDTO<RegionDTO>> getByName (@PathVariable String name)
+    @ApiOperation(value = "Get by name", notes = "Get single region according to it's name.")
+    public ResponseEntity<ResponseDTO<RegionDTO>> getByName (@PathVariable @ApiParam(name = "Name",
+            value = "Name of the region", required = true, example = "Europa") String name)
     {
         Region region = regionService.getByName(name);
 
@@ -51,15 +59,19 @@ public class RegionController
     }
 
     @GetMapping("/getByNameContaining/{name}")
-    public ResponseEntity<ResponseDTO<List<RegionDTO>>> getByNameContaining (@PathVariable String name)
+    @ApiOperation(value = "Get by name containing", notes = "Get list of regions that contains that key")
+    public ResponseEntity<ResponseDTO<List<RegionDTO>>> getByNameContaining (@PathVariable @ApiParam(name = "Name",
+            value = "Name that you think regions contain.", required = true, example = "Eur") String name)
     {
         List<Region> regions = regionService.getByNameContaining(name);
 
         return ResponseEntity.ok(getResponseWithList(regions));
     }
 
-    @PostMapping()
-    public ResponseEntity<ResponseDTO<RegionDTO>> add (@Valid @RequestBody RegionDTO regionDTO)
+    @PostMapping
+    @ApiOperation(value = "Add", notes = "Add new region.")
+    public ResponseEntity<ResponseDTO<RegionDTO>> add (@Valid @RequestBody @ApiParam(name = "Region",
+            value = "DTO for region", required = true) RegionDTO regionDTO)
     {
         Region region = converter.toRegion(regionDTO);
         region.setId(null);
@@ -77,7 +89,9 @@ public class RegionController
     }
 
     @PutMapping()
-    public ResponseEntity<ResponseDTO<RegionDTO>> update (@Valid @RequestBody RegionDTO regionDTO)
+    @ApiOperation(value = "Update", notes = "Update existing region.")
+    public ResponseEntity<ResponseDTO<RegionDTO>> update (@Valid @RequestBody @ApiParam(name = "Region",
+            value = "DTO for region", required = true) RegionDTO regionDTO)
     {
         Region region = regionService.getById(regionDTO.getId());
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>(regionDTO);
@@ -100,7 +114,9 @@ public class RegionController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<RegionDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete single region according to it's ID.")
+    public ResponseEntity<ResponseDTO<RegionDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the region", required = true, example = "5") Integer id)
     {
         Region region = regionService.getById(id);
         ResponseDTO<RegionDTO> responseDTO = new ResponseDTO<>();

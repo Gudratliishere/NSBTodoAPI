@@ -6,6 +6,9 @@ import com.gudratli.nsbtodoapi.dto.RoleDTO;
 import com.gudratli.nsbtodoapi.entity.Role;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateRoleException;
 import com.gudratli.nsbtodoapi.service.inter.RoleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/role")
+@Api("Role controller")
 public class RoleController
 {
     private final RoleService roleService;
@@ -25,6 +29,7 @@ public class RoleController
 
     @GetMapping(value = {"/getAll", ""})
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @ApiOperation(value = "Get All", notes = "Returns all roles.")
     public ResponseEntity<ResponseDTO<List<RoleDTO>>> getAll ()
     {
         List<Role> roleList = roleService.getAll();
@@ -40,7 +45,9 @@ public class RoleController
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single role according to it's ID.")
+    public ResponseEntity<ResponseDTO<RoleDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the role", required = true, example = "1") Integer id)
     {
         Role role = roleService.getById(id);
 
@@ -49,7 +56,9 @@ public class RoleController
 
     @GetMapping("/getByName/{name}")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> getByName (@PathVariable String name)
+    @ApiOperation(value = "Get by ID", notes = "Returns single role according to it's name.")
+    public ResponseEntity<ResponseDTO<RoleDTO>> getByName (@PathVariable @ApiParam(name = "Name",
+            value = "Name of the role", required = true, example = "USER") String name)
     {
         Role role = roleService.getByName(name);
 
@@ -58,7 +67,9 @@ public class RoleController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> add (@Valid @RequestBody RoleDTO roleDTO)
+    @ApiOperation(value = "Add", notes = "Add new role.")
+    public ResponseEntity<ResponseDTO<RoleDTO>> add (@Valid @RequestBody @ApiParam(name = "Role",
+            value = "DTO for role", required = true) RoleDTO roleDTO)
     {
         Role role = converter.toRole(roleDTO);
         role.setId(null);
@@ -79,7 +90,9 @@ public class RoleController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> update (@Valid @RequestBody RoleDTO roleDTO)
+    @ApiOperation(value = "Update", notes = "Update single role with it's ID.")
+    public ResponseEntity<ResponseDTO<RoleDTO>> update (@Valid @RequestBody @ApiParam(name = "Role",
+            value = "DTO for roles.", required = true) RoleDTO roleDTO)
     {
         Role role = roleService.getById(roleDTO.getId());
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>(roleDTO);
@@ -103,7 +116,9 @@ public class RoleController
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<RoleDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete single role with it's ID.")
+    public ResponseEntity<ResponseDTO<RoleDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the role", required = true, example = "3") Integer id)
     {
         Role role = roleService.getById(id);
         ResponseDTO<RoleDTO> responseDTO = new ResponseDTO<>();

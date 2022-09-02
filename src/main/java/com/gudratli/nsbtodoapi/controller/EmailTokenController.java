@@ -6,7 +6,9 @@ import com.gudratli.nsbtodoapi.dto.EmailTokenVerifyDTO;
 import com.gudratli.nsbtodoapi.dto.ResponseDTO;
 import com.gudratli.nsbtodoapi.entity.EmailToken;
 import com.gudratli.nsbtodoapi.service.inter.EmailTokenService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/emailToken")
 @Validated
+@Api("Email token")
 public class EmailTokenController
 {
     private final EmailTokenService emailTokenService;
@@ -29,6 +32,7 @@ public class EmailTokenController
 
     @GetMapping(value = {"/getAll", ""})
     @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @ApiOperation(value = "Get All", notes = "Returns all tokens.")
     public ResponseEntity<ResponseDTO<List<EmailTokenDTO>>> getAll ()
     {
         List<EmailToken> emailTokens = emailTokenService.getAll();
@@ -38,7 +42,9 @@ public class EmailTokenController
 
     @GetMapping("/getByEmail/{email}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<List<EmailTokenDTO>>> getByEmail (@PathVariable String email)
+    @ApiOperation(value = "Get by email", notes = "Returns list of tokens according to email.")
+    public ResponseEntity<ResponseDTO<List<EmailTokenDTO>>> getByEmail (@PathVariable @ApiParam(name = "Email",
+            value = "Email that you want to see it's tokens.", required = true, example = "dunay@gmail.com") String email)
     {
         List<EmailToken> emailTokens = emailTokenService.getByEmail(email);
 
@@ -47,7 +53,9 @@ public class EmailTokenController
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<EmailTokenDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single email token according to ID.")
+    public ResponseEntity<ResponseDTO<EmailTokenDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of email token", required = true, example = "18") Integer id)
     {
         EmailToken emailToken = emailTokenService.getById(id);
 
@@ -56,8 +64,10 @@ public class EmailTokenController
 
     @GetMapping("/getActiveByEmail/{email}")
     @PreAuthorize("permitAll()")
-    @ApiOperation(value = "files", notes = "upload user emails from CSV and email content from json and send out")
-    public ResponseEntity<ResponseDTO<EmailTokenDTO>> getActiveByEmail (@PathVariable String email)
+    @ApiOperation(value = "Get active by email",
+            notes = "Returns single email token that holds active token according to email.")
+    public ResponseEntity<ResponseDTO<EmailTokenDTO>> getActiveByEmail (@PathVariable @ApiParam(name = "Email",
+            value = "Email that you want to see it's active token.", required = true, example = "dunay@gmail.com") String email)
     {
         EmailToken emailToken = emailTokenService.getActiveByEmail(email);
 
@@ -66,7 +76,10 @@ public class EmailTokenController
 
     @PostMapping("/isValid")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<Boolean>> isValid (@Valid @RequestBody EmailTokenVerifyDTO emailTokenVerifyDTO)
+    @ApiOperation(value = "Is valid?",
+            notes = "Returns true or false that indicates email token is valid or not or expired.")
+    public ResponseEntity<ResponseDTO<Boolean>> isValid (@Valid @RequestBody @ApiParam(name = "Email Token Verify",
+            value = "DTO for verifying email token.", required = true) EmailTokenVerifyDTO emailTokenVerifyDTO)
     {
         EmailToken emailToken = emailTokenService.getById(emailTokenVerifyDTO.getId());
         ResponseDTO<Boolean> responseDTO = new ResponseDTO<>();
@@ -93,8 +106,12 @@ public class EmailTokenController
 
     @PostMapping("/generateToken/{email}")
     @PreAuthorize("permitAll()")
+    @ApiOperation(value = "Generate token",
+            notes = "Generates new token for that email and returns DTO that holds it's ID.")
     public ResponseEntity<ResponseDTO<EmailTokenDTO>> generateToken (
-            @PathVariable @Email(message = "Email must be valid") String email)
+            @PathVariable @Email(message = "Email must be valid") @ApiParam(name = "Email",
+                    value = "Email that you want to generate new token for it.", required = true, example = "dunay@gmail.com")
+                    String email)
     {
         EmailToken emailToken = emailTokenService.generateToken(email);
 
@@ -106,7 +123,10 @@ public class EmailTokenController
 
     @PutMapping("/expire/{id}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ResponseDTO<EmailTokenDTO>> expire (@PathVariable Integer id)
+    @ApiOperation(value = "Expire",
+            notes = "Expire email token with it's ID, so it indicates that email token has been used.")
+    public ResponseEntity<ResponseDTO<EmailTokenDTO>> expire (@PathVariable @ApiParam(name = "ID",
+            value = "ID of email token you want to expire.", required = true, example = "16") Integer id)
     {
         EmailToken emailToken = emailTokenService.getById(id);
         ResponseDTO<EmailTokenDTO> responseDTO = new ResponseDTO<>();

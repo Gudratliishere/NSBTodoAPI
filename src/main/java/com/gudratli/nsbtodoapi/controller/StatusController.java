@@ -6,6 +6,9 @@ import com.gudratli.nsbtodoapi.dto.StatusDTO;
 import com.gudratli.nsbtodoapi.entity.Status;
 import com.gudratli.nsbtodoapi.exception.duplicate.DuplicateStatusException;
 import com.gudratli.nsbtodoapi.service.inter.StatusService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/status")
+@Api("Status controller")
 public class StatusController
 {
     private final StatusService statusService;
@@ -25,6 +29,7 @@ public class StatusController
 
     @GetMapping(value = {"/getAll", ""})
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @ApiOperation(value = "Get All", notes = "Get all status")
     public ResponseEntity<ResponseDTO<List<StatusDTO>>> getAll ()
     {
         List<Status> statuses = statusService.getAll();
@@ -40,7 +45,9 @@ public class StatusController
 
     @GetMapping(value = {"/getById/{id}", "/{id}"})
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> getById (@PathVariable Integer id)
+    @ApiOperation(value = "Get by ID", notes = "Returns single status with it's ID.")
+    public ResponseEntity<ResponseDTO<StatusDTO>> getById (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the status", required = true, example = "3") Integer id)
     {
         Status status = statusService.getById(id);
 
@@ -49,7 +56,9 @@ public class StatusController
 
     @GetMapping("/getByName/{name}")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> getByName (@PathVariable String name)
+    @ApiOperation(value = "Get by name", notes = "Returns single status with it's name, because name is unique.")
+    public ResponseEntity<ResponseDTO<StatusDTO>> getByName (@PathVariable @ApiParam(name = "Name",
+            value = "Name of the status", required = true, example = "Incomplete") String name)
     {
         Status status = statusService.getByName(name);
 
@@ -58,7 +67,9 @@ public class StatusController
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> add (@Valid @RequestBody StatusDTO statusDTO)
+    @ApiOperation(value = "Add", notes = "Add new status")
+    public ResponseEntity<ResponseDTO<StatusDTO>> add (@Valid @RequestBody @ApiParam(name = "Status",
+            value = "DTO for status", required = true) StatusDTO statusDTO)
     {
         Status status = converter.toStatus(statusDTO);
         status.setId(null);
@@ -79,7 +90,9 @@ public class StatusController
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> update (@Valid @RequestBody StatusDTO statusDTO)
+    @ApiOperation(value = "Update", notes = "Update existing status with it's ID.")
+    public ResponseEntity<ResponseDTO<StatusDTO>> update (@Valid @RequestBody @ApiParam(name = "Status",
+            value = "DTO for status", required = true) StatusDTO statusDTO)
     {
         Status status = statusService.getById(statusDTO.getId());
         ResponseDTO<StatusDTO> responseDTO = new ResponseDTO<>(statusDTO);
@@ -103,7 +116,9 @@ public class StatusController
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseDTO<StatusDTO>> delete (@PathVariable Integer id)
+    @ApiOperation(value = "Delete", notes = "Delete single status with it's ID.")
+    public ResponseEntity<ResponseDTO<StatusDTO>> delete (@PathVariable @ApiParam(name = "ID",
+            value = "ID of the status", required = true, example = "5") Integer id)
     {
         Status status = statusService.getById(id);
         ResponseDTO<StatusDTO> responseDTO = new ResponseDTO<>();
